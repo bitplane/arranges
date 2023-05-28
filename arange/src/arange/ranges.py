@@ -1,4 +1,4 @@
-from typing import Any, List, Union
+from typing import Any, List
 
 from arange.range import Range
 from arange.utils import is_int, is_iterable, is_range
@@ -13,21 +13,26 @@ class Ranges:
 
     def __init__(self, value=""):
         self.ranges = []
-
-        ranges = Ranges.flatten(value)
-        ranges.sort()
-
-        for r in ranges:
-            self.append(r)
+        self.append(value)
 
         super().__init__()
 
-    def append(self, value: Range) -> None:
+    def append(self, value: Any) -> None:
         """
-        Add this range to the list of ranges.
+        Add to the list of ranges.
 
         This mutates the object.
         """
+        # deal with non-range objects
+        if not isinstance(value, Range):
+            ranges = Ranges.flatten(value)
+            ranges.sort()
+
+            for r in ranges:
+                self.append(r)
+            return
+
+        # absorb range objects
         self.ranges.append(value)
         self.ranges.sort()
 
@@ -65,60 +70,14 @@ class Ranges:
         Combine this range with another range
         """
         new = Ranges(self)
-        if isinstance(other, Range):
-            new.append(other)
-            return new
-        elif isinstance(other, str):
-            other = Ranges(other)
-
-        if isinstance(other, Ranges):
-            for o in other.ranges:
-                new.append(o)
-        else:
-            if is_iterable(other):
-                for o in other:
-                    new.append(o)
-            else:
-                new.append(other)
-
+        new.append(Ranges(other))
         return new
 
     def __contains__(self, other: Any) -> bool:
         """
-        See if a value is in our ranges
+        Are all of the other ranges in our ranges?
         """
-        # this is a disgusting copy/paste of Range.__contains__
-        # and should be made a lot thinner
-        if is_int(other):
-            for r in self.ranges:
-                if other in r:
-                    return True
-            return False
-
-        if is_range(other):
-            for r in self.ranges:
-                if other in r:
-                    return True
-            return False
-
-        if isinstance(other, Ranges):
-            return other.ranges in self
-
-        if isinstance(other, str):
-            return Ranges(other) in self
-
-        if is_iterable(other):
-            # generic support for iterables
-            for o in other:
-                if o not in self:
-                    return False
-            return True
-
-        # Do whatever Range can do
-        for r in self.ranges:
-            if other in r:
-                return True
-        return False
+        return str(self) == str(self + other)
 
     def __iter__(self):
         """
@@ -130,7 +89,7 @@ class Ranges:
             for i in r:
                 yield i
 
-    def overlaps(self, other: Union["Ranges", str]) -> bool:
+    def overlaps(self, other: Any) -> bool:
         """
         True if this range overlaps with the other range
         """

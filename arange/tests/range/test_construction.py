@@ -90,3 +90,15 @@ def test_value_with_integer():
 
     assert r.start == 0
     assert r.stop == 2
+
+
+def test_range_from_range():
+    first = Range(1)
+    second = Range(first)
+
+    assert first == second
+
+
+def test_error_on_empty_args():
+    with pytest.raises(ValueError):
+        Range()

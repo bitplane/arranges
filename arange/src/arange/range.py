@@ -43,18 +43,18 @@ class Range:
 
         elif value_only:
             if is_range(value):
-                self.start = value.start or 0
-                self.stop = value.stop or inf
+                self.start = 0 if value.start is None else value.start
+                self.stop = inf if value.stop is None else value.stop
             elif isinstance(value, str):
                 other = self.parse_str(value)
-                self.start = other.start or 0
-                self.stop = other.stop or inf
+                self.start = other.start
+                self.stop = other.stop
             else:
                 self.start = 0
                 self.stop = value
         else:
             self.start = start or 0
-            self.stop = stop or inf
+            self.stop = inf if stop is None else stop
 
         # Convert to integers
         self.start = int(self.start)
@@ -81,8 +81,9 @@ class Range:
 
         if len(vals) == 1:
             start = 0
-            stop = to_int(vals[0], inf)
+            stop = to_int(vals[0], 0)
         else:
+            # start:stop
             start = to_int(vals[0], 0)
             stop = to_int(vals[1], inf)
 
@@ -93,8 +94,10 @@ class Range:
         Python representation
         """
         name = self.__class__.__name__
+        if not self:
+            return f"{name}(0, 0)"
         if not self.start and self.stop is inf:
-            return f"{name}()"
+            return f"{name}(0, inf)"
         if self.start == 0:
             return f"{name}({self.stop})"
 
@@ -126,8 +129,12 @@ class Range:
             return self.start == other and self.stop == other + 1
         if isinstance(other, str):
             return self == self.parse_str(other)
-        elif not is_range(other):
+        if not is_range(other):
             return str(self) == str(other)
+        if not self and not other:
+            return True
+        if not isinstance(other, Range):
+            return self == Range(other)
 
         return self.start == other.start and self.stop == other.stop
 
@@ -207,14 +214,16 @@ class Range:
     @property
     def last(self) -> int:
         """
-        Gets the last value in this range. Will return infinity if the range
-        has no end
+        Gets the last value in this range. Will return inf if the range
+        has no end, and -1 if it has no contents,
         """
+        if not self:
+            return -1
         return self.stop - 1
 
     def overlaps(self, other: "Range") -> bool:
         """
-        True if this range overlaps with the other range
+        True if this range overlaps with the other range.
         """
         if self in other or other in self:
             return True
@@ -244,6 +253,11 @@ class Range:
         """
         Return a new range that is the combination of this range and the other
         """
+        if not other:
+            return self
+        if not self:
+            return other
+
         if not self.attached(other):
             raise ValueError(f"{self} and {other} aren't touching")
 

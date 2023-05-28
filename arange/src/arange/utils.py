@@ -7,7 +7,7 @@ from typing import Any
 
 class _Boundless(int):
     """
-    A class that represents a boundless range
+    A class that represents a boundless end of a range
     """
 
     def __repr__(self) -> str:

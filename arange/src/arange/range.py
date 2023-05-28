@@ -1,7 +1,7 @@
-import math
-from typing import Any, Iterable, Union
+import sys
+from typing import Any, Union
 
-from arange.utils import is_int, is_iterable, is_range, to_int
+from arange.utils import inf, is_int, is_iterable, is_range, to_int
 
 
 class Range:
@@ -10,24 +10,21 @@ class Range:
     """
 
     start: int = 0
-    stop: Union[int, float] = math.inf
+    stop: int = sys.maxsize
 
-    def __init__(
-        self, value: Any = None, stop: Union[int, float] = None, start: int = None
-    ):
+    def __init__(self, value: Any = None, stop: int = None, start: int = None):
         """
         Construct a range from a value, start and stop, or a value and stop, similar to Python slice
         and range notation, but with no step and no negative ranges.
 
-        If just a value is passed, and it has a start and stop attribute, those will be used as the
-        start and stop values. If it's a string, it will be parsed as a range string (e.g. "0:10",
-        "1:" and so on). If it's an integer or math.inf, it will be used as the stop value.
+        If `value` is a string, it'll expect slice notation, e.g. "100:" or "1:10". Hex, octal and
+        binary numbers are supported, along with "start", "inf" and "end" which are considered None
+        and 0 respectively. An empty string is treated to be an empty range, and ":" is the full
+        range.
 
-        If a value and stop are passed, the value will be used as the start value and the stop will be
-        used as the stop value. If a start and stop are passed, they will be used as the start and stop
-        values.
-
-        If no values are passed then it'll default to the full range from 0 to infinity.
+        If the `value` is an object that has `start` and `stop` attributes then it'll use those
+        values for the start and stop positions, so you can use `range` or `slice` or another `Range`
+        if you like. If it's an integer, it'll use that as the stop value and the start defaults to 0.
         """
         has_no_params = value is stop is start is None
         value_only = value is not None and (stop is start is None)
@@ -37,33 +34,31 @@ class Range:
         if inconsistent:
             raise ValueError("Got two values for start position")
 
+        if has_no_params:
+            raise ValueError("Expected at least one argument, got 0")
+
         if start_value_and_stop:
             self.start = value
             self.stop = stop
 
         elif value_only:
             if is_range(value):
-                self.start = value.start
-                self.stop = value.stop
+                self.start = value.start or 0
+                self.stop = value.stop or inf
             elif isinstance(value, str):
-                # do this rather than change all the tests 'cause I'm lazy
                 other = self.parse_str(value)
-                self.start = other.start
-                self.stop = other.stop
+                self.start = other.start or 0
+                self.stop = other.stop or inf
             else:
                 self.start = 0
                 self.stop = value
-
-        elif has_no_params:
-            self.start = 0
-            self.stop = math.inf
         else:
             self.start = start or 0
-            self.stop = stop or math.inf
+            self.stop = stop or inf
 
         # Convert to integers
         self.start = int(self.start)
-        if self.stop != math.inf:
+        if self.stop is not inf:
             self.stop = int(self.stop)
 
         if self.start < 0 or self.stop < 0:
@@ -86,39 +81,47 @@ class Range:
 
         if len(vals) == 1:
             start = 0
-            stop = to_int(vals[0], math.inf)
+            stop = to_int(vals[0], inf)
         else:
             start = to_int(vals[0], 0)
-            stop = to_int(vals[1], math.inf)
+            stop = to_int(vals[1], inf)
 
         return cls(start=start, stop=stop)
 
     def __repr__(self):
+        """
+        Python representation
+        """
         name = self.__class__.__name__
-        if not self.start and self.stop is math.inf:
+        if not self.start and self.stop is inf:
             return f"{name}()"
-        elif self.start == 0:
+        if self.start == 0:
             return f"{name}({self.stop})"
-        else:
-            return f"{name}({self.start}, {self.stop})"
+
+        return f"{name}({self.start}, {self.stop})"
 
     def __str__(self):
         """
         Convert to a string
         """
-        if not self.start and self.stop is math.inf:
+        if not self:
+            return ""
+        if not self.start and self.stop == inf:
             return ":"
-        elif self.start == 0:
+        if self.start == 0:
             return f"{self.stop}"
-        elif self.stop is math.inf:
+        if self.stop == inf:
             return f"{self.start}:"
-        else:
-            return f"{self.start}:{self.stop}"
+
+        return f"{self.start}:{self.stop}"
 
     def __hash__(self) -> int:
         return hash(str(self))
 
     def __eq__(self, other: Any) -> bool:
+        """
+        Compare two ranges
+        """
         if is_int(other):
             return self.start == other and self.stop == other + 1
         if isinstance(other, str):
@@ -140,22 +143,23 @@ class Range:
 
         return self.start < other
 
-    def __gt__(self, other: Any) -> bool:
-        """
-        Just for sorting. Makes no claims about the ranges being comparable
-        """
-        return not self < other and self != other
-
-    def __contains__(self, other: Union["Range", int, float, Iterable]) -> bool:
+    def __contains__(self, other: Any) -> bool:
         """
         See if a value is in this range
         """
         if is_int(other):
             return self.start <= other <= self.last
 
+        if not self:  # nothing fits in an empty range
+            return False
+
         if is_range(other):
-            start_inside = other.start in self
-            last_inside = self.stop is None or (other.stop - 1) in self
+            if not other:
+                return True  # the empty set is a subset of all sets
+
+            inf_stop = other.stop or inf
+            start_inside = not self.start or other.start in self
+            last_inside = self.stop is None or (inf_stop - 1) in self
 
             return start_inside and last_inside
 
@@ -185,15 +189,23 @@ class Range:
             yield i
             i += 1
 
-    @property
-    def is_full(self) -> bool:
+    def __len__(self) -> Union[int, float]:
         """
-        True if this range starts at zero and has no end
+        Get the length of this range
         """
-        return self.start == 0 and self.stop is math.inf
+        if self.start == self.stop:
+            return 0
+
+        return self.stop - self.start
+
+    def __bool__(self) -> bool:
+        """
+        True if this range has a length
+        """
+        return len(self) > 0
 
     @property
-    def last(self) -> Union[int, float]:
+    def last(self) -> int:
         """
         Gets the last value in this range. Will return infinity if the range
         has no end
@@ -223,7 +235,8 @@ class Range:
 
     def attached(self, other: "Range") -> bool:
         """
-        True if this range is adjacent or overlaps the other range
+        True if this range is adjacent or overlaps the other range, and so they
+        can be joined together.
         """
         return self.adjacent(other) or self.overlaps(other)
 
@@ -234,11 +247,10 @@ class Range:
         if not self.attached(other):
             raise ValueError(f"{self} and {other} aren't touching")
 
-        r = Range()
-        r.start = min(self.start, other.start)
-        r.stop = max(self.stop, other.stop)
+        start = min(self.start, other.start)
+        stop = max(self.stop, other.stop)
 
-        return r
+        return Range(start, stop)
 
     @classmethod
     def validate(cls, value: Any) -> "Range":

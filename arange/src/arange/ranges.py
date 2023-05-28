@@ -47,19 +47,19 @@ class Ranges:
                 i -= 1
             i += 1
 
-    def __eq__(self, other: "Ranges"):
+    def __eq__(self, other: "Ranges") -> bool:
         """
         Compare the two lists based on their string representations
         """
         return str(self) == str(other)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Return a code representation of this bunch of ranges
         """
         return f'{self.__class__.__name__}("{str(self)}")'
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Return a string representation of this bunch of ranges
         """

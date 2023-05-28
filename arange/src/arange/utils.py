@@ -1,9 +1,35 @@
 """
 Some quacky type helpers so we don't have to use isinstance everywhere
 """
-
-import math
+import sys
 from typing import Any
+
+
+class _Boundless(int):
+    """
+    A class that represents a boundless range
+    """
+
+    def __repr__(self) -> str:
+        return "inf"
+
+    def __gt__(self, other):
+        return True
+
+    def __lt__(self, other):
+        return False
+
+    def __eq__(self, other):
+        return super().__eq__(other)
+
+    def __sub__(self, value: int) -> int:
+        return self
+
+    def __add__(self, value: int) -> int:
+        return self
+
+
+inf = _Boundless(sys.maxsize)
 
 
 def to_int(value: str, default: int) -> int:
@@ -21,8 +47,10 @@ def to_int(value: str, default: int) -> int:
             return int(value, 8)
         elif "0b" in value:
             return int(value, 2)
-        elif value == "inf" or value == "math.inf":
-            return math.inf
+        elif value in ("inf", "end"):
+            return sys.maxsize
+        elif value == "start":
+            return 0
         else:
             raise ValueError(f"Invalid integer value {value}")
 

@@ -108,7 +108,6 @@ def test_membership_range():
     ranges = Ranges("1:10,20:30,100:150")
 
     assert Range(20, 30) in ranges
-    assert Range() not in ranges
 
 
 def test_create_from_sequence():

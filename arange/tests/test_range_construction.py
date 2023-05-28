@@ -1,8 +1,7 @@
-import math
-
 import pytest
 
 from arange import Range
+from arange.utils import inf
 
 
 def test_range():
@@ -38,14 +37,14 @@ def test_range_no_stop():
     val = Range("1:")
 
     assert val.start == 1
-    assert val.stop == math.inf
+    assert val.stop == inf
 
 
 def test_range_no_start_no_stop():
     val = Range(":")
 
     assert val.start == 0
-    assert val.stop == math.inf
+    assert val.stop == inf
 
 
 def test_hex_range():

@@ -1,9 +1,37 @@
-# A Range - Range objects for Pydantic BaseModels
+# A Range - Range strings for Pydantic BaseModels
+
+I needed a way to specify batches of byte, row and line ranges in my
+`merge-files`  app, and the more I messed with it the more it grew into a
+monster. So I've split it out into a separate package.
+
+## Installation
+
+`pip install arranges`, or clone the repo and `pip install ./arranges` from the
+root of the repo. Or `make dev` and `code .` to open the project in a venv
+in vscode.
+
+## Usage
+
+Construct a `Range` or `Ranges` object from a `str`, list of `int`s, or
+anything with `start` and `stop` attributes (`range`s, `slice`s or similar),
+and get an object you can iterate over, test membership, combine and do other
+things with.
+
+```python
+
+from arranges import Ranges
+
+
+## Constraints
+
+I'm using them for 
+
+```bash
 
 ```python
 from pydantic import BaseModel
 
-from arange import Range, Ranges
+from arranges import Range, Ranges
 
 
 class AnExample(BaseModel):

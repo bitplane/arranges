@@ -1,4 +1,4 @@
-from arange import Ranges
+from arranges import Ranges
 
 
 def test_repr():

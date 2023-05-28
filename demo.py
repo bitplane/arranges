@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from arange import Range, Ranges
+from arranges import Range, Ranges
 
 
 class AnExample(BaseModel):

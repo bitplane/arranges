@@ -4,7 +4,7 @@
 source .venv/bin/activate
 
 # install our package
-python3 -m pip install ./arange
+python3 -m pip install ./arranges
 
 # let make know that we are installed in user mode
 echo Installed normally

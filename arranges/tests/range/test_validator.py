@@ -1,7 +1,7 @@
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from arange import Range
+from arranges import Range
 
 
 class ModelWithRange(BaseModel):

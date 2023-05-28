@@ -4,7 +4,7 @@
 source .venv/bin/activate
 
 # install our package
-python3 -m pip install -e ./arange[dev]
+python3 -m pip install -e ./arranges[dev]
 
 # let make know that we are installed in user mode
 echo "Installed in dev mode"

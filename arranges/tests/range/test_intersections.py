@@ -1,4 +1,4 @@
-from arange import Range
+from arranges import Range
 
 
 def test_join():

@@ -39,7 +39,7 @@ release: build/release.sh ## publish to pypi
 .docs/index.html: build/docs.sh mkdocs.yml $(shell find -name '*.md')
 	build/docs.sh
 
-.venv/.installed: */pyproject.toml .venv/bin/activate build/install.sh $(shell find arange -name '*.py')
+.venv/.installed: */pyproject.toml .venv/bin/activate build/install.sh $(shell find arranges -name '*.py')
 	build/install.sh
 
 .venv/.installed-dev: */pyproject.toml .venv/bin/activate build/install-dev.sh

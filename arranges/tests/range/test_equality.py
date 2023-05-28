@@ -1,4 +1,4 @@
-from arange import Range, inf
+from arranges import Range, inf
 
 
 def test_equality():

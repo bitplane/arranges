@@ -1,7 +1,7 @@
 import sys
 from typing import Any, Union
 
-from arange.utils import inf, is_int, is_iterable, is_range, to_int
+from arranges.utils import inf, is_int, is_iterable, is_range, to_int
 
 
 class Range:

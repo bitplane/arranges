@@ -1,7 +1,7 @@
 from typing import Any, List
 
-from arange.range import Range
-from arange.utils import is_int, is_iterable, is_range
+from arranges.range import Range
+from arranges.utils import is_int, is_iterable, is_range
 
 
 class Ranges:

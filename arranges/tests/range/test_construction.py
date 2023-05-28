@@ -1,7 +1,7 @@
 import pytest
 
-from arange import Range
-from arange.utils import inf
+from arranges import Range
+from arranges.utils import inf
 
 
 def test_range():

@@ -2,4 +2,4 @@
 
 source .venv/bin/activate
 
-python -m build arange
+python -m build arranges

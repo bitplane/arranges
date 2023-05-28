@@ -1,4 +1,4 @@
-from arange import Range, Ranges
+from arranges import Range, Ranges
 
 
 def test_collapse_ranges():

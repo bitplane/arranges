@@ -1,6 +1,6 @@
 import pytest
 
-from arange import Ranges
+from arranges import Ranges
 
 
 def test_parse_single_range():

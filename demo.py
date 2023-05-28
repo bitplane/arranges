@@ -46,4 +46,10 @@ txt = """
 
 x = AnExample.parse_raw(txt)
 
+
+# you can add ranges together
+
 print(f"{x.some_ranges} + {x.another} == {x.some_ranges + x.another}")
+
+# you can iterate over them or convert to lists
+print(f"{list(x.another_range)}")

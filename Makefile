@@ -31,8 +31,8 @@ update-pre-commit: build/update-pre-commit.sh  ## autoupdate pre-commit
 dist: build/dist.sh ## build the distributable files
 	build/dist.sh
 
-publish: build/publish.sh ## publish to pypi
-	build/publish.sh
+release: build/release.sh ## publish to pypi
+	build/release.sh
 
 # Caching doesn't work if we depend on PHONY targets
 

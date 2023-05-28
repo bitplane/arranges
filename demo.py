@@ -6,9 +6,7 @@ from arange import Range, Ranges
 
 
 class AnExample(BaseModel):
-    """
-    
-    """
+    """ """
 
     a_range: Range = Range(":50")
     """
@@ -18,7 +16,7 @@ class AnExample(BaseModel):
 
     another_range: Range = Range(range(10, 35))
     """
-    You can create them from actual ranges if you like. 
+    You can create them from actual ranges if you like.
     """
 
     some_ranges: Ranges = Ranges("4:5, 15:30, 100:, 4")
@@ -29,7 +27,7 @@ class AnExample(BaseModel):
 
     It's an unbounded range.
     """
-    
+
     some_more_ranges: Ranges = Ranges([1, 2, 3, 4, range(8, 15), "20:"])
     """
       str(some_more_ranges) == "1:4,8:15,20:"

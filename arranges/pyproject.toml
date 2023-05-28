@@ -28,7 +28,8 @@ dev = [
     "pytest-cov",
     "coverage",
     "build",
-    "twine"
+    "twine",
+    "mkdocs"
 ]
 
 [build-system]

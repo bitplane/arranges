@@ -1,0 +1,5 @@
+.venv
+.coverage
+__pycache__
+merge-files/dist
+test-output.xml

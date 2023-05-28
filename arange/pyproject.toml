@@ -1,0 +1,42 @@
+[project]
+name = "arange"
+description = "Mergable range object for use in Pydantic classes"
+version = "0.0.1"
+authors = [
+    { name = "Gareth Davidson", email = "gaz@bitplane.net" }
+]
+
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: Public Domain", # WTFPL
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+
+dependencies = [
+    "pydantic",
+]
+
+[project.optional-dependencies]
+dev = [
+    "flake8",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "coverage",
+    "build",
+    "twine"
+]
+
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.2,<4"]
+
+
+[project.urls]
+"Homepage" = "https://github.com/bitplane/arange"
+"Bug Tracker" = "https://github.com/bitplane/merge-files/arange"
+

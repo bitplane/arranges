@@ -1,12 +1,12 @@
 import sys
-from typing import Any, Union
+from typing import Any, Tuple
 
-from arranges.utils import inf, is_int, is_iterable, is_range, to_int
+from arranges.utils import as_type, inf, is_intlike, is_iterable, is_rangelike, to_int
 
 
 class Range:
     """
-    A single range of values
+    A range of numbers, similar to Python slice notation, but with no step and no negative ranges.
     """
 
     start: int = 0
@@ -42,11 +42,15 @@ class Range:
             self.stop = stop
 
         elif value_only:
-            if is_range(value):
+            if is_rangelike(value):
                 self.start = 0 if value.start is None else value.start
                 self.stop = inf if value.stop is None else value.stop
             elif isinstance(value, str):
                 other = self.parse_str(value)
+                self.start = other.start
+                self.stop = other.stop
+            elif is_iterable(value):
+                other = self.from_iterable(value)
                 self.start = other.start
                 self.stop = other.stop
             else:
@@ -89,6 +93,39 @@ class Range:
 
         return cls(start=start, stop=stop)
 
+    @classmethod
+    def from_iterable(cls, values: Any) -> "Range":
+        """
+        Construct Range from an iterable
+        """
+        values = list(set(values))
+        values.sort()
+
+        if not values or len(values) == 1:
+            return Range(0, 0)
+
+        start = int(values[0])
+        stop = start
+
+        for value in values:
+            if not is_intlike(value) or value < 0:
+                raise ValueError("Only positive integers are allowed")
+
+            if value > stop:
+                raise ValueError("Continuous ranges only")
+
+            if value == stop:
+                stop += 1
+
+        return Range(start, stop)
+
+    @staticmethod
+    def sort_key(value: "Range") -> Tuple[int]:
+        """
+        Sort key function for sorting ranges
+        """
+        return value.start, value.stop
+
     def __repr__(self):
         """
         Python representation
@@ -111,7 +148,7 @@ class Range:
             return ""
         if not self.start and self.stop == inf:
             return ":"
-        if self.start == 0:
+        if not self.start:
             return f"{self.stop}"
         if self.stop == inf:
             return f"{self.start}:"
@@ -125,42 +162,154 @@ class Range:
         """
         Compare two ranges
         """
-        if is_int(other):
+        if is_intlike(other):
             return self.start == other and self.stop == other + 1
         if isinstance(other, str):
             return self == self.parse_str(other)
-        if not is_range(other):
-            return str(self) == str(other)
         if not self and not other:
             return True
-        if not isinstance(other, Range):
-            return self == Range(other)
+
+        try:
+            other = as_type(Range, other)
+        except TypeError:
+            return False
 
         return self.start == other.start and self.stop == other.stop
 
+    def isdisjoint(self, other: Any) -> bool:
+        """
+        Return True if this range is disjoint from the other range
+        """
+        other = as_type(Range, other)
+        return not self.intersects(other)
+
+    def issubset(self, other: Any) -> bool:
+        """
+        Return True if this range is a subset of the other range
+        """
+        other = as_type(Range, other)
+        return self in other
+
+    def __le__(self, other: Any) -> bool:
+        """
+        Return True if this range is a subset of the other range
+        """
+        other = as_type(Range, other)
+        return self in other
+
     def __lt__(self, other: Any) -> bool:
         """
-        Just for sorting. Makes no claims about the ranges being comparable
+        Return True if this range is a proper subset of the other range
         """
-        if is_range(other):
-            start = self.start or 0
-            other_start = other.start or 0
+        other = as_type(Range, other)
+        return self in other and self != other
 
-            return start < other_start
+    def issuperset(self, other: Any) -> bool:
+        """
+        Return True if this range is a superset of the other range
+        """
+        other = as_type(Range, other)
+        return other in self
 
-        return self.start < other
+    def __ge__(self, other: Any) -> bool:
+        """
+        Return True if this range is a superset of the other range
+        """
+        other = as_type(Range, other)
+        return other in self
+
+    def __gt__(self, other: Any) -> bool:
+        """
+        Return True if this range is a proper superset of the other range
+        """
+        other = as_type(Range, other)
+        return other in self and self != other
+
+    def union(self, *others) -> "Range":
+        """
+        Return the union of this range and the other ranges
+        """
+        ret = self
+        for other in others:
+            ret = ret | other
+        return ret
+
+    def __or__(self, other: Any) -> "Range":
+        """
+        Return the union of this range and the other range
+        """
+        if not other:
+            return self
+        if not self:
+            return other
+
+        if not self.isconnected(other):
+            raise ValueError(f"{self} and {other} aren't touching")
+
+        start = min(self.start, other.start)
+        stop = max(self.stop, other.stop)
+
+        return Range(start, stop)
+
+    def intersection(self, *others: "Range") -> "Range":
+        """
+        Return the intersection of this range and the other ranges
+        """
+        ret: Range = self
+
+        for other in others:
+            if not ret.intersects(other):
+                return Range(0, 0)
+
+            start = max(ret.start, other.start)
+            stop = min(ret.stop, other.stop)
+            if start >= stop:
+                return Range(0, 0)
+
+            ret = Range(start, stop)
+
+        return ret
+
+    def __and__(self, other: "Range") -> "Range":
+        """
+        Return the intersection of this range and the other range
+        """
+        return self.intersection(other)
+
+    def __sub__(self, other: "Range") -> "Range":
+        """
+        Return the difference between this range and the other
+        """
+        if not self.intersects(other):
+            return Range(self)
+
+    # def difference(self, *others):
+    #     """
+    #     Remove the other ranges from this one
+    #     """
+    #
+
+    # def symmetric_difference(self, other: "Range") -> "Range":
+    #     """
+    #     Return the symmetric difference of two ranges
+    #     """
+
+    # def __xor__(self, other: "Range") -> "Range":
+    #     """
+    #     Return the symmetric difference of two ranges
+    #     """
 
     def __contains__(self, other: Any) -> bool:
         """
-        See if a value is in this range
+        Membership test. Supports integers, strings, ranges and iterables.
         """
-        if is_int(other):
+        if is_intlike(other):
             return self.start <= other <= self.last
 
         if not self:  # nothing fits in an empty range
             return False
 
-        if is_range(other):
+        if is_rangelike(other):
             if not other:
                 return True  # the empty set is a subset of all sets
 
@@ -181,12 +330,6 @@ class Range:
 
         raise TypeError(f"Unsupported type {type(other)}")
 
-    def __add__(self, other: Any) -> "Range":
-        """
-        Join two ranges together, if possible, and return a new one
-        """
-        return self.join(other)
-
     def __iter__(self):
         """
         Iterate over the values in this range
@@ -196,7 +339,7 @@ class Range:
             yield i
             i += 1
 
-    def __len__(self) -> Union[int, float]:
+    def __len__(self) -> int:
         """
         Get the length of this range
         """
@@ -221,9 +364,9 @@ class Range:
             return -1
         return self.stop - 1
 
-    def overlaps(self, other: "Range") -> bool:
+    def intersects(self, other: "Range") -> bool:
         """
-        True if this range overlaps with the other range.
+        True if this range intersects the other range.
         """
         if self in other or other in self:
             return True
@@ -233,7 +376,7 @@ class Range:
 
         return False
 
-    def adjacent(self, other: "Range") -> bool:
+    def isadjacent(self, other: "Range") -> bool:
         """
         True if this range is adjacent to the other range
         """
@@ -242,29 +385,12 @@ class Range:
 
         return False
 
-    def attached(self, other: "Range") -> bool:
+    def isconnected(self, other: "Range") -> bool:
         """
-        True if this range is adjacent or overlaps the other range, and so they
+        True if this range is adjacent to or overlaps the other range, and so they
         can be joined together.
         """
-        return self.adjacent(other) or self.overlaps(other)
-
-    def join(self, other: "Range") -> "Range":
-        """
-        Return a new range that is the combination of this range and the other
-        """
-        if not other:
-            return self
-        if not self:
-            return other
-
-        if not self.attached(other):
-            raise ValueError(f"{self} and {other} aren't touching")
-
-        start = min(self.start, other.start)
-        stop = max(self.stop, other.stop)
-
-        return Range(start, stop)
+        return self.isadjacent(other) or self.intersects(other)
 
     @classmethod
     def validate(cls, value: Any) -> "Range":

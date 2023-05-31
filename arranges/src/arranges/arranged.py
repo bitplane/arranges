@@ -1,10 +1,10 @@
 from typing import Any, List
 
 from arranges.range import Range
-from arranges.utils import is_int, is_iterable, is_range
+from arranges.utils import is_intlike, is_iterable, is_rangelike
 
 
-class Ranges:
+class Arranged:
     """
     A list of ranges that are combined and sorted
     """
@@ -25,8 +25,8 @@ class Ranges:
         """
         # deal with non-range objects
         if not isinstance(value, Range):
-            ranges = Ranges.flatten(value)
-            ranges.sort()
+            ranges = Arranged.flatten(value)
+            ranges.sort(key=Range.sort_key)
 
             for r in ranges:
                 self.append(r)
@@ -34,20 +34,20 @@ class Ranges:
 
         # absorb range objects
         self.ranges.append(value)
-        self.ranges.sort()
+        self.ranges.sort(key=Range.sort_key)
 
         i = 1
 
         while i < len(self.ranges):
             current = self.ranges[i]
             last = self.ranges[i - 1]
-            if last.attached(current):
-                self.ranges[i - 1] = current.join(last)
+            if last.isconnected(current):
+                self.ranges[i - 1] = current.union(last)
                 del self.ranges[i]
                 i -= 1
             i += 1
 
-    def __eq__(self, other: "Ranges") -> bool:
+    def __eq__(self, other: "Arranged") -> bool:
         """
         Compare the two lists based on their string representations
         """
@@ -65,12 +65,12 @@ class Ranges:
         """
         return ",".join(str(r) for r in self.ranges)
 
-    def __add__(self, other: Any) -> "Ranges":
+    def __add__(self, other: Any) -> "Arranged":
         """
         Combine this range with another range
         """
-        new = Ranges(self)
-        new.append(Ranges(other))
+        new = Arranged(self)
+        new.append(Arranged(other))
         return new
 
     def __contains__(self, other: Any) -> bool:
@@ -89,14 +89,14 @@ class Ranges:
             for i in r:
                 yield i
 
-    def overlaps(self, other: Any) -> bool:
+    def intersects(self, other: Any) -> bool:
         """
         True if this range overlaps with the other range
         """
-        other = Ranges(other)
+        other: Arranged = Arranged(other)
         for r in self.ranges:
             for o in other.ranges:
-                if r.overlaps(o):
+                if r.intersects(o):
                     return True
 
         return False
@@ -128,21 +128,21 @@ class Ranges:
         if _current is None:
             _current = []
 
-        if is_range(obj):
+        if is_rangelike(obj):
             _current.append(Range(obj))
         elif hasattr(obj, "ranges"):
             for r in obj.ranges:
-                Ranges.flatten(r, _current=_current)
+                Arranged.flatten(r, _current=_current)
         elif isinstance(obj, str):
             for s in obj.split(","):
                 _current.append(Range.parse_str(s))
-        elif is_int(obj):
+        elif is_intlike(obj):
             # todo: extend last range in case we're iterating over
             # a large sequence
             _current.append(Range(obj, obj + 1))
         elif is_iterable(obj):
             for item in obj:
-                Ranges.flatten(item, _current=_current)
+                Arranged.flatten(item, _current=_current)
         else:
             raise TypeError(f"Unsupported type {type(obj)}")
 

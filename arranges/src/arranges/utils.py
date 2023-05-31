@@ -2,7 +2,9 @@
 Some quacky type helpers so we don't have to use isinstance everywhere
 """
 import sys
-from typing import Any
+from typing import Any, Type, TypeVar
+
+T = TypeVar("T")
 
 
 class _Boundless(int):
@@ -55,14 +57,14 @@ def to_int(value: str, default: int) -> int:
             raise ValueError(f"Invalid integer value {value}")
 
 
-def is_range(value: Any) -> bool:
+def is_rangelike(value: Any) -> bool:
     """
     Check if a value is a range-like object
     """
     return hasattr(value, "start") and hasattr(value, "stop")
 
 
-def is_int(value: Any) -> bool:
+def is_intlike(value: Any) -> bool:
     """
     Can this object be converted to an integer?
     """
@@ -74,3 +76,14 @@ def is_iterable(value: Any) -> bool:
     Is this object iterable?
     """
     return hasattr(value, "__iter__")
+
+
+def as_type(cls: Type[T], value: Any) -> T:
+    """
+    Convert a value to a type, if necessary.
+
+    Saves a bit of construction time if the value is already the right type.
+    """
+    if isinstance(value, cls):
+        return value
+    return cls(value)

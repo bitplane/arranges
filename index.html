@@ -52,13 +52,33 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="1"><a href="#a-range-range-strings-for-pydantic-basemodels" class="nav-link">A Range - Range strings for Pydantic BaseModels</a>
+            <li class="nav-item" data-level="1"><a href="#arranges" class="nav-link">Arranges</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#range-strings-for-pydantic-basemodels" class="nav-link">Range strings for Pydantic BaseModels</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
             <li class="nav-item" data-level="2"><a href="#installation" class="nav-link">Installation</a>
               <ul class="nav flex-column">
               </ul>
             </li>
             <li class="nav-item" data-level="2"><a href="#usage" class="nav-link">Usage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#constraints" class="nav-link">Constraints</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#examples" class="nav-link">Examples</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#api-docs" class="nav-link">API Docs</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#license" class="nav-link">License</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -69,80 +89,137 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="a-range-range-strings-for-pydantic-basemodels">A Range - Range strings for Pydantic BaseModels</h1>
+<h1 id="arranges">Arranges</h1>
+<h2 id="range-strings-for-pydantic-basemodels">Range strings for Pydantic BaseModels</h2>
 <p>I needed a way to specify batches of byte, row and line ranges in my
-<code>merge-files</code>  app, and the more I messed with it the more it grew into a
-monster. So I've split it out into a separate package.</p>
+<code>merge-files</code> app. It it kinda grew into a monster so I've split it out into
+a separate package. It arranges and merges ranges, and the name "arranger"
+was already taken so I've called it <code>arranged</code>.</p>
 <h2 id="installation">Installation</h2>
-<p><code>pip install arranges</code>, or clone the repo and <code>pip install ./arranges</code> from the
-root of the repo. Or <code>make dev</code> and <code>code .</code> to open the project in a venv
-in vscode.</p>
+<p><code>pip install arranged</code>, or clone the repo and <code>make dev</code> to make the venv,
+install dependencies, then <code>code .</code> to open the project up in the venv with
+debugging and all that jazz.</p>
+<p>Type <code>make help</code> to see the other options, or run the one-liner scripts in the
+<code>./build</code> dir if you want to do stuff without all that fancy caching stuff.</p>
 <h2 id="usage">Usage</h2>
-<p>Construct a <code>Range</code> or <code>Ranges</code> object from a <code>str</code>, list of <code>int</code>s, or
+<p>Construct a <code>Arranged</code> or <code>Ranges</code> object from a <code>str</code>, list of <code>int</code>s, or
 anything with <code>start</code> and <code>stop</code> attributes (<code>range</code>s, <code>slice</code>s or similar),
 and get an object you can iterate over, test membership, combine and do other
 things with.</p>
-<pre><code class="language-python">
-from arranges import Ranges
+<p>Step through <a href="./demo.py">../demo.py</a> in the debugger to see what's going on.</p>
+<h2 id="constraints">Constraints</h2>
+<p>I made it to select lines or bytes in a stream of data, so it:</p>
+<ul>
+<li>only supports <code>int</code>s;</li>
+<li>does not allow negative indices, the minimum is 0 and the maximum is
+  unbounded;</li>
+<li>does not support step values, only start and stop values; and</li>
+<li>does not support duplicate ranges. Ranges are merged together as they are
+  added to the <code>Arranged</code> object.</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<h3 id="ranges-as-strings">Ranges as strings</h3>
+<pre><code class="language-python">from arranges import Ranges
+
+# Create a range from a string. Like a slice but without the square
+# brackets.
+the_full_range = Ranges(&quot;:&quot;) # an endless sequence starting at 0
+the_empty_range = Range(&quot;&quot;)
+from_0_to_99 = Ranges(&quot;100&quot;)  # the same as &quot;:100&quot;
+skip_10_items = Ranges(&quot;10:&quot;)
+from_100_to_199 = Ranges(&quot;100:200&quot;)
+
+# Decimal, hexadecimal, octal and binary are supported. Note that octal uses
+# Python's 0o prefix, not 0 like in C.
+gbc_palette = Ranges(&quot;0xff68:0xff88&quot;)
+skip_bmp_header = Ranges(&quot;0o66:end&quot;)  # skip &quot;54&quot;, &quot;0x36&quot; or &quot;0b1100110&quot; bytes
+
+# &quot;end&quot; and &quot;inf&quot; are the same. You can also use &quot;start&quot; instead of 0.
+the_full_range_again = Ranges(&quot;start:inf&quot;)
+
+# You can put gaps in your range using commas. Spaces are ignored.
+pages_2_to_5_and_20 = Ranges(&quot;2:6, 20:20&quot;)
+
+# The ranges are sorted and combined as they are added, an dthe `str` of the
+# range is consistant and always displayed in decimal format with no spaces.
+# The hash value of the range is the hash of its `str` value, so they are safe
+# to cache if you don't mutate them.
+# They compare with strings as long as the string is in canonical form:
+assert Ranges(&quot;start:10, 1:3, 0xe:0xf&quot;) == &quot;10,14:16&quot;
+</code></pre>
+<h3 id="ranges-from-other-things">Ranges from other things</h3>
+<pre><code class="language-python">from arranges import Ranges
+
+# You can create a range from anything that has a start and stop attribute,
+# like so:
+assert Ranges(slice(10, 20)) == Ranges(range(10, 20)) == &quot;10:20&quot;
+
+# Ints are just a range that spans one integer, and sequences containing
+# them are combined into a Ranges object:
+assert Ranges([0, [&quot;1:3&quot;], 3, 4, range(10, 20)]) == &quot;5,10:20&quot;
+</code></pre>
+<h3 id="operators-and-methods">Operators and methods</h3>
+<pre><code class="language-python">from arranges import Ranges
+
+first_100 = Ranges(&quot;100&quot;)
+next_100 = Ranges(&quot;100:200&quot;)
+
+# The + operator combines ranges:
+first_200 = first_100 + next_100
+
+assert first_200 == &quot;200&quot; # works if the right side is in canonical form
+assert first_100 in first_200 # use the in operator to test membership
+assert first_100 &lt; next_100 # less than is only used for ordering
+assert len(first_200) == 200 # len() returns the number of items in the range
+assert not Range(&quot;&quot;) # empty ranges are falsey
+
+assert not first_100.overlaps(next_100) # use overlaps() to test for overlap
+assert first_100.adjacent(next_100) # use adjacent() to test for adjacency
+assert first_100.adjacent(
+
+# todo:
+#
+# use &quot;-&quot; to remove a range from another
+# implement &amp; operator
+# implement | operator
+#
 
 
-## Constraints
 
-I'm using them for 
+len(s)                       - number of elements in set s (cardinality)
+x in s                       - test for membership
 
-```bash
+x not in s                   - all not in
+isdisjoint(other)
 
-```python
-from pydantic import BaseModel
+issubset(other)              - all in
+set &lt;= other
 
-from arranges import Range, Ranges
+set &lt; other                  - not equal, but all in
 
+issuperset(other)            -
+set &gt;= other                 - all in
 
-class AnExample(BaseModel):
-    &quot;&quot;&quot;
+set &gt; other                  - &gt;= and not ==
 
-    &quot;&quot;&quot;
+union(*others)               - combine them (plus)
+set | other
 
-    a_range: Range = Range(&quot;:50&quot;)
-    &quot;&quot;&quot;
-    Validator runs converts the string into a range. This is
-    0-49 inclusive.
-    &quot;&quot;&quot;
+intersection(*others)        -
+set &amp; other
 
-    another_range: Range = Range(range(10, 35))
-    &quot;&quot;&quot;
-    You can create them from actual ranges if you like.
-    &quot;&quot;&quot;
+difference(*others)          - remove it
+set - other
 
-    some_ranges: Ranges = Ranges(&quot;4:5, 15:30, 100:, 4&quot;)
-    &quot;&quot;&quot;
-    This gets compressed to:
-
-      str(some_ranges) == &quot;5,15:30,100:&quot;
-
-    It's an unbounded range.
-    &quot;&quot;&quot;
-
-    some_more_ranges: Ranges = Ranges([1, 2, 3, 4, range(8, 15), &quot;20:&quot;])
-    &quot;&quot;&quot;
-      str(some_more_ranges) == &quot;1:4,8:15,20:&quot;
-
-    You get the idea
-    &quot;&quot;&quot;
-
-    another: Ranges
-
-
-txt = &quot;&quot;&quot;
-{
-    &quot;another&quot;: &quot;1:10,20:30,1&quot;
-}
-&quot;&quot;&quot;
-
-x = AnExample.parse_raw(txt)
-
-print(f&quot;{x.some_ranges} + {x.another} == {x.some_ranges + x.another}&quot;)
-</code></pre></div>
+symmetric_difference(other)  - in either but not both.
+set ^ other
+</code></pre>
+<pre><code class="language-python">from arranges import Ranges
+</code></pre>
+<h2 id="api-docs">API Docs</h2>
+<h2 id="license">License</h2>
+<p>WTFPL with one additional clause: don't blame me. Free as in freedom from
+legalese.</p></div>
             </div>
         </div>
 
@@ -223,5 +300,5 @@ print(f&quot;{x.some_ranges} + {x.another} == {x.some_ranges + x.another}&quot;)
 
 <!--
 MkDocs version : 1.4.3
-Build Date UTC : 2023-05-28 13:06:40.238103+00:00
+Build Date UTC : 2023-06-16 18:07:52.749078+00:00
 -->

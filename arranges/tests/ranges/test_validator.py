@@ -1,11 +1,11 @@
 import pytest
 from pydantic import BaseModel, ValidationError
 
-from arranges import Arranged
+from arranges import Ranges
 
 
 class ModelWithRanges(BaseModel):
-    ranges: Arranged
+    ranges: Ranges
 
     class Config:
         arbitrary_types_allowed = True
@@ -22,7 +22,7 @@ def test_working_ranges_str():
 
 
 def test_working_ranges():
-    model = ModelWithRanges(ranges=Arranged("1:10, 20:30"))
+    model = ModelWithRanges(ranges=Ranges("1:10, 20:30"))
 
     assert len(model.ranges.ranges) == 2
     assert model.ranges.ranges[0].start == 1

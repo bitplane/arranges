@@ -1,8 +1,8 @@
-from arranges import Arranged, Range
+from arranges import Range, Ranges
 
 
 def test_membership_int():
-    ranges = Arranged("1:10,20:30,100:150")
+    ranges = Ranges("1:10,20:30,100:150")
 
     assert 0 not in ranges
     assert 1 in ranges
@@ -17,20 +17,20 @@ def test_membership_int():
 
 
 def test_membership_sequence():
-    ranges = Arranged("1:10,20:30,100:150")
+    ranges = Ranges("1:10,20:30,100:150")
 
     assert range(10, 15) not in ranges
     assert range(100, 110) in ranges
 
 
 def test_membership_range():
-    ranges = Arranged("1:10,20:30,100:150")
+    ranges = Ranges("1:10,20:30,100:150")
 
     assert Range(20, 30) in ranges
 
 
 def test_membership_empty_range():
-    ranges = Arranged("1:10,20:30,100:150")
+    ranges = Ranges("1:10,20:30,100:150")
     empty = Range(0, 0)
 
     assert empty in ranges

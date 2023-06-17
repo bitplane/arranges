@@ -1,4 +1,3 @@
-import sys
 from typing import Any, Tuple
 
 from arranges.utils import as_type, inf, is_intlike, is_iterable, is_rangelike, to_int
@@ -10,7 +9,7 @@ class Range:
     """
 
     start: int = 0
-    stop: int = sys.maxsize
+    stop: int = inf
 
     def __init__(self, value: Any = None, stop: int = None, start: int = None):
         """
@@ -43,6 +42,9 @@ class Range:
 
         elif value_only:
             if is_rangelike(value):
+                if value.step not in (None, 1):
+                    raise ValueError("Step values of ranges are not supported")
+
                 self.start = 0 if value.start is None else value.start
                 self.stop = inf if value.stop is None else value.stop
             elif isinstance(value, str):
@@ -65,11 +67,16 @@ class Range:
         if self.stop is not inf:
             self.stop = int(self.stop)
 
+        self.step = 1
+
         if self.start < 0 or self.stop < 0:
             raise ValueError("Start and stop must be positive")
 
         if self.start > self.stop:
             raise ValueError("Stop can't be before start")
+
+        if self.start == self.stop:
+            self.start = self.stop = 0
 
         super().__init__()
 
@@ -84,8 +91,13 @@ class Range:
             raise ValueError("Too many values, Only start and stop are allowed")
 
         if len(vals) == 1:
-            start = 0
-            stop = to_int(vals[0], 0)
+            if not vals[0]:
+                # Empty range
+                start = stop = 0
+            else:
+                # single value
+                start = to_int(vals[0], 0)
+                stop = start + 1
         else:
             # start:stop
             start = to_int(vals[0], 0)
@@ -149,9 +161,11 @@ class Range:
         if not self.start and self.stop == inf:
             return ":"
         if not self.start:
-            return f"{self.stop}"
+            return f":{self.stop}"
         if self.stop == inf:
             return f"{self.start}:"
+        if self.stop == self.start + 1:
+            return str(self.start)
 
         return f"{self.start}:{self.stop}"
 
@@ -171,7 +185,7 @@ class Range:
 
         try:
             other = as_type(Range, other)
-        except TypeError:
+        except (TypeError, ValueError):
             return False
 
         return self.start == other.start and self.stop == other.stop
@@ -311,7 +325,7 @@ class Range:
 
         if is_rangelike(other):
             if not other:
-                return True  # the empty set is a subset of all sets
+                return True  # the empty set is a subset of all other sets
 
             inf_stop = other.stop or inf
             start_inside = not self.start or other.start in self
@@ -345,6 +359,9 @@ class Range:
         """
         if self.start == self.stop:
             return 0
+
+        if self.stop == inf:
+            return inf.__index__()
 
         return self.stop - self.start
 

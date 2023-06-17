@@ -10,7 +10,7 @@ def test_repr_full():
 
 
 def test_repr_stop_only():
-    assert repr(Range("  102")) == "Range(102)"
+    assert repr(Range("  102")) == "Range(102, 103)"
     assert repr(Range(":123")) == "Range(123)"
 
 
@@ -31,12 +31,15 @@ def test_str_full():
 
 
 def test_str_stop_only():
-    assert str(Range("  102")) == "102"
-    assert str(Range(":123")) == "123"
+    assert str(Range(":123")) == ":123"
 
 
 def test_str_start_only():
     assert str(Range("  102:")) == "102:"
+
+
+def test_str_single_number():
+    assert str(Range("  102")) == "102"
 
 
 def test_str_start_and_stop():

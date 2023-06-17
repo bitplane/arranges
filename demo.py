@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel
 
-from arranges import Arranged, Range
+from arranges import Range, Ranges
 
 
 class AnExample(BaseModel):
@@ -19,7 +19,7 @@ class AnExample(BaseModel):
     You can create them from actual ranges if you like.
     """
 
-    some_ranges: Arranged = Arranged("4:5, 15:30, 100:, 4")
+    some_ranges: Ranges = Ranges("4:5, 15:30, 100:, 4")
     """
     This gets compressed to:
 
@@ -28,14 +28,14 @@ class AnExample(BaseModel):
     It's an unbounded range.
     """
 
-    some_more_ranges: Arranged = Arranged([1, 2, 3, 4, range(8, 15), "20:"])
+    some_more_ranges: Ranges = Ranges([1, 2, 3, 4, range(8, 15), "20:"])
     """
       str(some_more_ranges) == "1:4,8:15,20:"
 
     You get the idea
     """
 
-    another: Arranged
+    another: Ranges
 
 
 txt = """

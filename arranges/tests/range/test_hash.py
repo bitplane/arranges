@@ -10,4 +10,4 @@ def test_empty_range():
 
 
 def test_hash_is_str_hash():
-    assert hash(Range(":10")) == hash("10")
+    assert hash(Range(":10")) == hash(":10")

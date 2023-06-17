@@ -1,37 +1,45 @@
 """
 Some quacky type helpers so we don't have to use isinstance everywhere
 """
+import math
 import sys
 from typing import Any, Type, TypeVar
 
 T = TypeVar("T")
 
 
-class _Boundless(int):
+class _Boundless(float):
     """
     A class that represents a boundless end of a range
     """
 
-    def __repr__(self) -> str:
-        return "inf"
+    huge = sys.maxsize
+    """
+    An enormous number that's .
+    """
 
-    def __gt__(self, other):
-        return True
+    def __eq__(self, other) -> bool:
+        """
+        Is this boundless?
+        """
+        return other == math.inf or other == self.huge
 
-    def __lt__(self, other):
-        return False
+    def __index__(self) -> int:
+        """
+        When used as an index, return a huge integer rather than infinity.
 
-    def __eq__(self, other):
-        return super().__eq__(other)
-
-    def __sub__(self, value: int) -> int:
-        return self
-
-    def __add__(self, value: int) -> int:
-        return self
+        This means `Range(":").stop == len(Range(":"))` but
+        `Range(":").stop != len(Range(":"))`, but it's the best we can do without
+        hacking cpython, afaik.
+        """
+        return self.huge
 
 
-inf = _Boundless(sys.maxsize)
+inf = _Boundless(math.inf)
+"""
+A boundless end of a range. When used as a stop value it's infinite, but when
+used as a length it's an unreasonably large integer.
+"""
 
 
 def to_int(value: str, default: int) -> int:
@@ -50,18 +58,18 @@ def to_int(value: str, default: int) -> int:
         elif "0b" in value:
             return int(value, 2)
         elif value in ("inf", "end"):
-            return sys.maxsize
+            return inf
         elif value == "start":
             return 0
         else:
             raise ValueError(f"Invalid integer value {value}")
 
 
-def is_rangelike(value: Any) -> bool:
+def is_rangelike(obj: Any) -> bool:
     """
     Check if a value is a range-like object
     """
-    return hasattr(value, "start") and hasattr(value, "stop")
+    return all(hasattr(obj, attr) for attr in ("start", "stop", "step"))
 
 
 def is_intlike(value: Any) -> bool:

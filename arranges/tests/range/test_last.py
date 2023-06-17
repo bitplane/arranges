@@ -7,7 +7,8 @@ def test_last_inf():
 
 
 def test_last_num():
-    assert Range("10").last == 9
+    assert Range(":10").last == 9
+    assert Range("10").last == 10
 
 
 def test_last_empty():

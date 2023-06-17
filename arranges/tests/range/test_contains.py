@@ -39,8 +39,8 @@ def test_nonetype_causes_error():
 
 
 def test_nothing_in_empty():
-    assert None not in Range("")
     assert 1 not in Range("")
+    assert [] not in Range(start=0, stop=0)
     assert Range("") not in Range("")
 
 
@@ -55,10 +55,3 @@ def test_contains_unsupported_type_error():
 
     with pytest.raises(TypeError):
         Crash() in Range(":")
-
-
-def test_not_equal_to_unknown_type():
-    class Unknown:
-        pass
-
-    assert Range(":") != Unknown()

@@ -4,9 +4,9 @@ from arranges.range import Range
 from arranges.utils import is_intlike, is_iterable, is_rangelike
 
 
-class Arranged:
+class Ranges:
     """
-    A list of ranges that are combined and sorted
+    An ordered set of ranges that are combined and sorted
     """
 
     ranges: list[Range]
@@ -25,7 +25,7 @@ class Arranged:
         """
         # deal with non-range objects
         if not isinstance(value, Range):
-            ranges = Arranged.flatten(value)
+            ranges = Ranges.flatten(value)
             ranges.sort(key=Range.sort_key)
 
             for r in ranges:
@@ -47,7 +47,7 @@ class Arranged:
                 i -= 1
             i += 1
 
-    def __eq__(self, other: "Arranged") -> bool:
+    def __eq__(self, other: "Ranges") -> bool:
         """
         Compare the two lists based on their string representations
         """
@@ -65,12 +65,12 @@ class Arranged:
         """
         return ",".join(str(r) for r in self.ranges)
 
-    def __add__(self, other: Any) -> "Arranged":
+    def __add__(self, other: Any) -> "Ranges":
         """
         Combine this range with another range
         """
-        new = Arranged(self)
-        new.append(Arranged(other))
+        new = Ranges(self)
+        new.append(Ranges(other))
         return new
 
     def __contains__(self, other: Any) -> bool:
@@ -93,7 +93,7 @@ class Arranged:
         """
         True if this range overlaps with the other range
         """
-        other: Arranged = Arranged(other)
+        other: Ranges = Ranges(other)
         for r in self.ranges:
             for o in other.ranges:
                 if r.intersects(o):
@@ -132,7 +132,7 @@ class Arranged:
             _current.append(Range(obj))
         elif hasattr(obj, "ranges"):
             for r in obj.ranges:
-                Arranged.flatten(r, _current=_current)
+                Ranges.flatten(r, _current=_current)
         elif isinstance(obj, str):
             for s in obj.split(","):
                 _current.append(Range.parse_str(s))
@@ -142,7 +142,7 @@ class Arranged:
             _current.append(Range(obj, obj + 1))
         elif is_iterable(obj):
             for item in obj:
-                Arranged.flatten(item, _current=_current)
+                Ranges.flatten(item, _current=_current)
         else:
             raise TypeError(f"Unsupported type {type(obj)}")
 

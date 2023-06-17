@@ -17,11 +17,11 @@ classifiers = [
 
 
 dependencies = [
-    "pydantic",
 ]
 
 [project.optional-dependencies]
 dev = [
+    "pydantic",
     "flake8",
     "pre-commit",
     "pytest",

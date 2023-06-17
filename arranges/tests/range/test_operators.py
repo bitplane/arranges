@@ -34,4 +34,5 @@ def test_union_adjacent_ranges():
 
 def test_iterator():
     assert list(Range("1:10")) == [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    assert list(Range("5")) == [0, 1, 2, 3, 4]
+    assert list(Range(":5")) == [0, 1, 2, 3, 4]
+    assert list(Range("3")) == [3]

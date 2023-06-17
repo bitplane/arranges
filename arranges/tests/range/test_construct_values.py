@@ -3,11 +3,6 @@ import pytest
 from arranges import Range
 
 
-def test_two_start_positions():
-    with pytest.raises(ValueError):
-        Range(value=1, start=0, stop=2)
-
-
 def test_start_and_stop():
     r = Range(10, 20)
 
@@ -30,7 +25,7 @@ def test_range_from_range():
 
 
 def test_error_on_empty_args():
-    with pytest.raises(ValueError):
+    with pytest.raises(TypeError):
         Range()
 
 

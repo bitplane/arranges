@@ -135,7 +135,7 @@ class Ranges:
                 Ranges.flatten(r, _current=_current)
         elif isinstance(obj, str):
             for s in obj.split(","):
-                _current.append(Range.parse_str(s))
+                _current.append(Range.from_str(s))
         elif is_intlike(obj):
             # todo: extend last range in case we're iterating over
             # a large sequence

@@ -1,2 +1,15 @@
 site_name: Arranges
-
+repo_url: https://github.com/bitplane/arranges/
+theme:
+  name: material
+  palette:
+    primary: 'indigo'
+    accent: 'blue'
+  features:
+    - navigation.expand_single_toc_entry
+    - navigation.sections
+nav:
+ - 'index.md'
+ - 'construction.md'
+ - 'operators.md'
+ - 'pydoc.md'

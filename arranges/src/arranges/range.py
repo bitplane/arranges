@@ -5,50 +5,48 @@ from arranges.utils import as_type, inf, is_intlike, is_iterable, is_rangelike, 
 
 class Range:
     """
-    A range of numbers, similar to Python slice notation, but with no step and no negative ranges.
+    A range of numbers, similar to Python slice notation, but with no step or
+    negative/relative ranges.
     """
 
     start: int = 0
     stop: int = inf
 
-    def __init__(self, value: Any = None, stop: int = None, start: int = None):
+    def __init__(self, value: Any, stop: int = None):
         """
-        Construct a range from a value, start and stop, or a value and stop, similar to Python slice
-        and range notation, but with no step and no negative ranges.
+        Construct a range from either a value:
 
-        If `value` is a string, it'll expect slice notation, e.g. "100:" or "1:10". Hex, octal and
-        binary numbers are supported, along with "start", "inf" and "end" which are considered None
-        and 0 respectively. An empty string is treated to be an empty range, and ":" is the full
-        range.
+        If `value` is a string, it'll use `Range.from_str` and expect a string
+        in slice notation.
 
-        If the `value` is an object that has `start` and `stop` attributes then it'll use those
-        values for the start and stop positions, so you can use `range` or `slice` or another `Range`
-        if you like. If it's an integer, it'll use that as the stop value and the start defaults to 0.
+        If `value` is an iterable, it'll use `Range.from_iterable` and expect
+        a sequence of consecutive integers.
+
+        If `value` is an object with `start`, `stop` and `step` value, it'll
+        use the start and stop values from that, though the `step` value must
+        be 1.
+
+        If `value` is an integer, it'll use that as the stop value, just like a
+        Python range or slice.
+
+        If a `value` and `stop` are provided then `value` is the start like in
+        a range or slice.
         """
-        has_no_params = value is stop is start is None
-        value_only = value is not None and (stop is start is None)
-        start_value_and_stop = value is not None and stop is not None
-        inconsistent = value is not None and start is not None
+        start_and_stop = value is not None and stop is not None
 
-        if inconsistent:
-            raise ValueError("Got two values for start position")
-
-        if has_no_params:
-            raise ValueError("Expected at least one argument, got 0")
-
-        if start_value_and_stop:
+        if start_and_stop:
             self.start = value
             self.stop = stop
 
-        elif value_only:
+        else:
             if is_rangelike(value):
                 if value.step not in (None, 1):
-                    raise ValueError("Step values of ranges are not supported")
+                    raise ValueError("Step values are not supported")
 
                 self.start = 0 if value.start is None else value.start
                 self.stop = inf if value.stop is None else value.stop
             elif isinstance(value, str):
-                other = self.parse_str(value)
+                other = self.from_str(value)
                 self.start = other.start
                 self.stop = other.stop
             elif is_iterable(value):
@@ -58,9 +56,6 @@ class Range:
             else:
                 self.start = 0
                 self.stop = value
-        else:
-            self.start = start or 0
-            self.stop = inf if stop is None else stop
 
         # Convert to integers
         self.start = int(self.start)
@@ -81,9 +76,18 @@ class Range:
         super().__init__()
 
     @classmethod
-    def parse_str(cls, value: str) -> "Range":
+    def from_str(cls, value: str) -> "Range":
         """
-        Construct Range from a string, Python slice notation
+        Construct Range from a string, Python slice notation. e.g. "100:" or
+        "1:10".
+
+        Hex, octal and binary numbers are supported, using Python syntax, e.g.
+        "0x10:0x20" or "0o10:0o20" or "0b100:0b110".
+
+        Special values "start", "inf" and "end" can be used, which are considered
+        to be 0 and `inf` respectively.
+
+        An empty string is treated to be an empty range, and ":" is the full range.
         """
         vals = [v.strip() for v in str(value).split(":")]
 
@@ -103,7 +107,7 @@ class Range:
             start = to_int(vals[0], 0)
             stop = to_int(vals[1], inf)
 
-        return cls(start=start, stop=stop)
+        return cls(start, stop)
 
     @classmethod
     def from_iterable(cls, values: Any) -> "Range":
@@ -179,7 +183,7 @@ class Range:
         if is_intlike(other):
             return self.start == other and self.stop == other + 1
         if isinstance(other, str):
-            return self == self.parse_str(other)
+            return self == self.from_str(other)
         if not self and not other:
             return True
 
@@ -334,7 +338,7 @@ class Range:
             return start_inside and last_inside
 
         if isinstance(other, str):
-            return self.parse_str(other) in self
+            return self.from_str(other) in self
 
         if is_iterable(other):
             for o in other:
@@ -418,7 +422,7 @@ class Range:
             return value
 
         if isinstance(value, str):
-            return cls.parse_str(value)
+            return cls.from_str(value)
 
         return cls(value)
 

@@ -40,7 +40,7 @@ def test_nonetype_causes_error():
 
 def test_nothing_in_empty():
     assert 1 not in Range("")
-    assert [] not in Range(start=0, stop=0)
+    assert [] not in Range(0, 0)
     assert Range("") not in Range("")
 
 

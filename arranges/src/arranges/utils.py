@@ -15,7 +15,7 @@ class _Boundless(float):
 
     huge = sys.maxsize
     """
-    An enormous number that's .
+    An enormous number that's used as a stand-in for infinity
     """
 
     def __eq__(self, other) -> bool:
@@ -28,9 +28,8 @@ class _Boundless(float):
         """
         When used as an index, return a huge integer rather than infinity.
 
-        This means `Range(":").stop == len(Range(":"))` but
-        `Range(":").stop != len(Range(":"))`, but it's the best we can do without
-        hacking cpython, afaik.
+        This is necessary because CPython doesn't allow lengths larger than
+        sys.maxsize, and Python has no way to represent infinity as an integer.
         """
         return self.huge
 
@@ -38,7 +37,7 @@ class _Boundless(float):
 inf = _Boundless(math.inf)
 """
 A boundless end of a range. When used as a stop value it's infinite, but when
-used as a length it's an unreasonably large integer.
+used as a length it's the largest index integer possible in cpython.
 """
 
 

@@ -29,7 +29,9 @@ dev = [
     "coverage",
     "build",
     "twine",
-    "mkdocs"
+    "mkdocs",
+    "mkdocs-material",
+    "pydoc-markdown"
 ]
 
 [build-system]

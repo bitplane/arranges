@@ -11,5 +11,6 @@ theme:
 nav:
  - 'index.md'
  - 'construction.md'
+ - 'iteration.md'
  - 'operators.md'
  - 'pydoc.md'

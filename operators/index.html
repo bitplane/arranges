@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../construction/">
+        <link rel="prev" href="../iteration/">
       
       
         <link rel="next" href="../pydoc/">
@@ -19,7 +19,7 @@
     
     
       
-        <title>Operators and set methods - Arranges</title>
+        <title>Set operations - Arranges</title>
       
     
     
@@ -67,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#operators-and-set-methods" class="md-skip">
+        <a href="#set-operations" class="md-skip">
           Skip to content
         </a>
       
@@ -102,7 +102,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Operators and set methods
+              Set operations
             
           </span>
         </div>
@@ -242,6 +242,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href="../iteration/" class="md-nav__link">
+        Iteration
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -253,68 +268,9 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Operators and set methods
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
-        Operators and set methods
+        Set operations
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#cardinality-of-the-address-range" class="md-nav__link">
-    Cardinality of the address range
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#truthyness" class="md-nav__link">
-    Truthyness
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#iterating" class="md-nav__link">
-    Iterating
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-docs" class="md-nav__link">
-    API Docs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    License
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -355,49 +311,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#cardinality-of-the-address-range" class="md-nav__link">
-    Cardinality of the address range
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#truthyness" class="md-nav__link">
-    Truthyness
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#iterating" class="md-nav__link">
-    Iterating
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#api-docs" class="md-nav__link">
-    API Docs
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    License
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -414,130 +327,90 @@
   
 
 
-<h1 id="operators-and-set-methods">Operators and set methods</h1>
-<p>Both the <code>Range</code> and <code>Ranges</code> objects are set-like.</p>
-<h2 id="cardinality-of-the-address-range">Cardinality of the address range</h2>
-<p>The length of a range is the number of elements it contains. But because ranges
-can be boundless, we have a special <code>inf</code> value that represents an infinite int
-as Python doesn't have or support one.</p>
-<p>This value is <code>math.inf</code>, but when returned from <code>len</code> it becomes <code>sys.maxsize</code>
-as it only supports ints that are this size or smaller. When comparing <code>inf</code> to
-<code>sys.maxsize</code> it'll return <code>True</code>, but this doesn't work in all directions:</p>
-<pre><code class="language-python">import math
-import sys
-from arranges import Ranges, inf
-
-assert len(Range(&quot;1,2,3,4,10:20&quot;)) == 14
-
-full = Range(&quot;:&quot;)
-
-assert len(full) == sys.maxsize
-assert len(full) == inf
-assert sys.maxsize == inf
-assert full.stop == inf
-assert inf - 100 == sys.maxsize
-
-# Careful though, this does not hold
-assert len(full) != math.inf
-
-# because it's an int
-assert type(len(full)) is int
-</code></pre>
-<h2 id="truthyness">Truthyness</h2>
-<p>Empty ranges are Falsey</p>
-<pre><code class="language-python">from arranges import Range, Ranges
-
-assert Ranges(&quot;:&quot;)
-assert Range(10)
-
-assert not Ranges(&quot;&quot;)
-assert not Range(&quot;&quot;)
-</code></pre>
-<h2 id="iterating">Iterating</h2>
-<p>You can iterate over a <code>Range</code> or <code>Ranges</code></p>
-<pre><code class="language-python">from arranges import Range, Ranges
-
-
-</code></pre>
-<p>...</p>
-<pre><code class="language-python">from arranges import Range, Ranges, inf
-
-first_100 = Ranges(&quot;:100&quot;)
-next_100 = Range(&quot;100:200&quot;)
-third_100 = Range(&quot;200:300&quot;)
-
-full_range = Range(&quot;:&quot;)
-
-# The | operator combines Range or Ranges, returning a new instance.
-first_200 = first_100 | next_100
-
-# len() works
-assert len(first_100) == len(second_100) == 100
-assert len(first_100 | third_100) == 200
-
-# inf is a special value, a float that is equal to as math.inf but returns
-# sys.maxsize when returned by len(), which can't be bigger than that.
-assert len(full_range) != math.inf
-assert len(full_range) == inf
-assert len(full_range) == sys.maxsize
-assert full_range.stop == inf == math.inf
-assert sys.maxsize == inf
-
-# use the in operator to test membership
-assert first_100 in first_200
-
-
-
-
-assert not Range(&quot;&quot;) # empty ranges are falsey
-
-assert not first_100.overlaps(next_100) # use overlaps() to test for overlap
-assert first_100.adjacent(next_100) # use adjacent() to test for adjacency
-assert first_100.adjacent(
-
-# todo:
-#
-# use &quot;-&quot; to remove a range from another
-# implement &amp; operator
-# implement | operator
-#
-
-
-
-len(s)                       - number of elements in set s (cardinality)
-x in s                       - test for membership
-
-x not in s                   - all not in
-isdisjoint(other)
-
-issubset(other)              - all in
-set &lt;= other
-
-set &lt; other                  - not equal, but all in
-
-issuperset(other)            -
-set &gt;= other                 - all in
-
-set &gt; other                  - &gt;= and not ==
-
-union(*others)               - combine them (plus)
-set | other
-
-intersection(*others)        -
-set &amp; other
-
-difference(*others)          - remove it
-set - other
-
-symmetric_difference(other)  - in either but not both.
-set ^ other
-</code></pre>
-<pre><code class="language-python">from arranges import Ranges
-</code></pre>
-<h2 id="api-docs">API Docs</h2>
-<h2 id="license">License</h2>
-<p>WTFPL with one additional clause: don't blame me. Free as in freedom from
-legalese.</p>
+<h1 id="set-operations">Set operations</h1>
+<p>They try to be set-like, supporting most of the operations that the <code>set</code>
+object does.</p>
+<table>
+<thead>
+<tr>
+<th align="center"><strong>Symbol</strong></th>
+<th align="center"><strong>Name</strong></th>
+<th align="center"><strong>Code</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="center"><code>A ⋂ B</code></td>
+<td align="center">intersection</td>
+<td align="center"><code>A &amp; B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ⋃ B</code></td>
+<td align="center">union</td>
+<td align="center"><code>A \| B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ⊆ B</code></td>
+<td align="center">subset</td>
+<td align="center"><code>A &lt;= B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ⊂ B</code></td>
+<td align="center">proper subset</td>
+<td align="center"><code>A &lt; B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ⊇ B</code></td>
+<td align="center">superset</td>
+<td align="center"><code>A &gt;= B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ⊃ B</code></td>
+<td align="center">proper superset</td>
+<td align="center"><code>A &gt; B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A = B</code></td>
+<td align="center">equality</td>
+<td align="center"><code>A == B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A'</code></td>
+<td align="center">complement</td>
+<td align="center"><code>!A</code></td>
+</tr>
+<tr>
+<td align="center"><code>A \ B</code></td>
+<td align="center">relative complement</td>
+<td align="center"><code>A - B</code></td>
+</tr>
+<tr>
+<td align="center"><code>A ∆ B</code></td>
+<td align="center">symmetric difference</td>
+<td align="center"><code>(A | B) - (A &amp; B)</code></td>
+</tr>
+<tr>
+<td align="center"><code>a ∈ A</code></td>
+<td align="center">membership</td>
+<td align="center"><code>a in A</code></td>
+</tr>
+<tr>
+<td align="center"><code>|A|</code></td>
+<td align="center">cardinality</td>
+<td align="center"><code>len(A)</code></td>
+</tr>
+<tr>
+<td align="center"><code>Ø</code></td>
+<td align="center">empty set</td>
+<td align="center"><code>Range("")</code></td>
+</tr>
+<tr>
+<td align="center"><code>ℕ0</code></td>
+<td align="center">natural numbers</td>
+<td align="center"><code>Range(":")</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

@@ -6,13 +6,13 @@ object does.
 | **Symbol** |       **Name**       |       **Code**       |
 |:----------:|:--------------------:|:--------------------:|
 | `A ⋂ B`    | intersection         | `A & B`              |
-| `A ⋃ B`    | union                | `A \| B`             |
+| `A ⋃ B`    | union                | `A | B`              |
 | `A ⊆ B`    | subset               | `A <= B`             |
 | `A ⊂ B`    | proper subset        | `A < B`              |
 | `A ⊇ B`    | superset             | `A >= B`             |
 | `A ⊃ B`    | proper superset      | `A > B`              |
 | `A = B`    | equality             | `A == B`             |
-| `A'`       | complement           | `!A`                 |
+| `A'`       | complement           | `~A`                 |
 | `A \ B`    | relative complement  | `A - B`              |
 | `A ∆ B`    | symmetric difference | `(A | B) - (A & B)`  |
 | `a ∈ A`    | membership           | `a in A`             |

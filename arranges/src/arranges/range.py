@@ -252,6 +252,21 @@ class Range:
             ret = ret | other
         return ret
 
+    def __invert__(self) -> "Range":
+        """
+        Return the inverse of this range (compliment)
+        """
+        if not self:
+            return Range(0, inf)
+
+        if self.start == 0:
+            return Range(self.stop, inf)
+
+        if self.stop == inf:
+            return Range(0, self.start)
+
+        raise ValueError("Inverting this range will cause a discontinuity")
+
     def __or__(self, other: Any) -> "Range":
         """
         Return the union of this range and the other range

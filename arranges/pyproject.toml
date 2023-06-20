@@ -1,7 +1,7 @@
 [project]
 name = "arranges"
 description = "Mergable range object for use in Pydantic classes"
-version = "0.0.4"
+version = "0.0.5"
 authors = [
     { name = "Gareth Davidson", email = "gaz@bitplane.net" }
 ]

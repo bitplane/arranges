@@ -58,7 +58,7 @@ Type `make help` to see the other options, or run the one-liner scripts in the
 
 * [RTFM](https://bitplane.github.io/arranges/)
 * Read [the tests](../arranges/tests/), which have full coverage.
-* [Read the API docs](../docs/api.md)
+* [Read the pydocs](../docs/pydocs.md)
 
 ## License
 

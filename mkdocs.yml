@@ -10,6 +10,7 @@ theme:
     - navigation.sections
 nav:
  - 'index.md'
+ - 'models.md'
  - 'construction.md'
  - 'iteration.md'
  - 'operators.md'

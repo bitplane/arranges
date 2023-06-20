@@ -9,22 +9,24 @@
       
       
       
+        <link rel="prev" href="..">
       
-        <link rel="next" href="models/">
       
-      <link rel="icon" href="assets/images/favicon.png">
+        <link rel="next" href="../construction/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.16">
     
     
       
-        <title>Arranges</title>
+        <title>Use in Pydantic models - Arranges</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ecc896b0.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
       
       
 
@@ -40,7 +42,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -65,7 +67,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#arranges" class="md-skip">
+        <a href="#use-in-pydantic-models" class="md-skip">
           Skip to content
         </a>
       
@@ -81,7 +83,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Arranges" class="md-header__button md-logo" aria-label="Arranges" data-md-component="logo">
+    <a href=".." title="Arranges" class="md-header__button md-logo" aria-label="Arranges" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -100,7 +102,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Arranges
+              Use in Pydantic models
             
           </span>
         </div>
@@ -181,7 +183,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Arranges" class="md-nav__button md-logo" aria-label="Arranges" data-md-component="logo">
+    <a href=".." title="Arranges" class="md-nav__button md-logo" aria-label="Arranges" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -210,6 +212,21 @@
 
   
   
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Arranges
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
     
   
   
@@ -221,97 +238,10 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Arranges
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
-        Arranges
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#range-string-fields-for-pydantic-basemodels" class="md-nav__link">
-    Range string fields for Pydantic BaseModels
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#constraints" class="md-nav__link">
-    Constraints
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    Installation
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#dev-setup" class="md-nav__link">
-    Dev setup
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    License
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-    
-      
-      
-      
-
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="models/" class="md-nav__link">
+      <a href="./" class="md-nav__link md-nav__link--active">
         Use in Pydantic models
       </a>
+      
     </li>
   
 
@@ -324,7 +254,7 @@
   
   
     <li class="md-nav__item">
-      <a href="construction/" class="md-nav__link">
+      <a href="../construction/" class="md-nav__link">
         Constructing Range and Ranges
       </a>
     </li>
@@ -339,7 +269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="iteration/" class="md-nav__link">
+      <a href="../iteration/" class="md-nav__link">
         Iteration
       </a>
     </li>
@@ -354,7 +284,7 @@
   
   
     <li class="md-nav__item">
-      <a href="operators/" class="md-nav__link">
+      <a href="../operators/" class="md-nav__link">
         Set operations
       </a>
     </li>
@@ -369,7 +299,7 @@
   
   
     <li class="md-nav__item">
-      <a href="pydoc/" class="md-nav__link">
+      <a href="../pydoc/" class="md-nav__link">
         Pydoc
       </a>
     </li>
@@ -396,62 +326,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#range-string-fields-for-pydantic-basemodels" class="md-nav__link">
-    Range string fields for Pydantic BaseModels
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#constraints" class="md-nav__link">
-    Constraints
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    Installation
-  </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#dev-setup" class="md-nav__link">
-    Dev setup
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#license" class="md-nav__link">
-    License
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -468,63 +342,19 @@
   
 
 
-<h1 id="arranges">Arranges</h1>
-<h2 id="range-string-fields-for-pydantic-basemodels">Range string fields for Pydantic BaseModels</h2>
-<p>I needed a way to parse batches of byte, row and line and other object ranges
-in my <code>merge-files</code> app, in a way that I can just drop it in as a string field
-type. The reason for this is so the machine-generated command line help is
-flat and readable by humans.</p>
-<p>It it kinda grew into a monster so I've split it out into this separate
-package. It gives a couple of classes for dealing with ranges:</p>
-<ul>
-<li><code>Range</code>, a class that can be constructed from Python-style slice notation
-  strings (e.g. <code>"1:10"</code>, <code>"0x00:0xff</code>, <code>":"</code>), range-likes, iterables of
-  int-like objects. It has convenient properties lke being iterable, immutable,
-  has a stable string representation and matching hash, it can be treated
-  like a <code>set</code> and its constructor is compatible with <code>range</code> and <code>slice</code>.</li>
-<li>The <code>Ranges</code> class is similar but supports holes in ranges - it's an ordered,
-  mutable list of non-overlapping <code>Range</code> objects that simplifies as data is
-  added.</li>
-</ul>
-<h2 id="constraints">Constraints</h2>
-<p>I made it to select lines or bytes in a stream of data, so it:</p>
-<ul>
-<li>only supports <code>int</code>s;</li>
-<li>does not allow negative indices, the minimum is 0 and the maximum is
-  unbounded;</li>
-<li>it's compatible with <code>range</code> and <code>slice</code>, but <code>step</code> is fixed to <code>1</code>. This
-  may change in the future;</li>
-<li>does not support duplicate ranges. Ranges are merged together as they are
-  added to the <code>Ranges</code> object;</li>
-<li>it is unpydantic in that its constructors are duck-typed, which is what I
-  need; and</li>
-<li>it violates the Zen of Python by having multiple ways to do the same thing,
-  but it's also useful.</li>
-<li>Currently the interface is <em>unstable</em>, so lock the exact version in if you
-  don't want breaking changes.</li>
-</ul>
-<h2 id="installation">Installation</h2>
-<p><code>pip install arranges</code> if you want to use it. You'll need Python 3.10 or
-above.</p>
-<h3 id="dev-setup">Dev setup</h3>
-<p>To add features etc you'll ideally need <code>git</code>, <code>make</code>, <code>bash</code> and something
-with a debugger. Config for Visual Studio Code is included.</p>
-<p>Clone the repo and <code>make dev</code> to make the venv, install dependencies, then
-<code>code .</code> to open the project up in the venv with tests and debugging and all
-that jazz.</p>
-<p>Type <code>make help</code> to see the other options, or run the one-liner scripts in the
-<code>./build</code> dir if you want to run steps without all that fancy caching nonsense.</p>
-<h2 id="usage">Usage</h2>
-<ul>
-<li><a href="https://bitplane.github.io/arranges/">RTFM</a></li>
-<li>Read <a href="../arranges/tests/">the tests</a>, which have full coverage.</li>
-<li><a href="../docs/pydocs.md">Read the pydocs</a></li>
-</ul>
-<h2 id="license">License</h2>
-<p>Free as in freedom from legalese; the <a href="../LICENSE">WTFPL with a warranty clause</a>.</p>
-<p>Political note: I don't want to live in a world where lawyers tell me how to
-speak. If you don't trust me enough to use the WTFPL then you shouldn't be
-running my code in the first place.</p>
+<h1 id="use-in-pydantic-models">Use in Pydantic models</h1>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+
+
+class BinaryPatch(BaseModel):
+    &quot;&quot;&quot;
+
+    &quot;&quot;&quot;
+    regions: Ranges = Ranges(&quot;:&quot;)
+
+
+
+</code></pre>
 
 
 
@@ -562,10 +392,10 @@ running my code in the first place.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.expand_single_toc_entry", "navigation.sections"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.expand_single_toc_entry", "navigation.sections"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.a51614de.min.js"></script>
+      <script src="../assets/javascripts/bundle.a51614de.min.js"></script>
       
     
   </body>

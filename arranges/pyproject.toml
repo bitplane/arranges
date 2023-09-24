@@ -21,7 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pydantic",
+    "pydantic==2.3.0",
     "flake8",
     "pre-commit",
     "pytest",

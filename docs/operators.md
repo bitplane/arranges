@@ -3,6 +3,9 @@
 They try to be set-like, supporting most of the operations that the `set`
 object does.
 
+Actually, dunno how much of this I'm missing. Raise a ticket if there are
+gaps.
+
 | **Symbol** |       **Name**       |       **Code**       |
 |:----------:|:--------------------:|:--------------------:|
 | `A ⋂ B`    | intersection         | `A & B`              |
@@ -17,5 +20,5 @@ object does.
 | `A ∆ B`    | symmetric difference | `(A | B) - (A & B)`  |
 | `a ∈ A`    | membership           | `a in A`             |
 | `|A|`      | cardinality          | `len(A)`             |
-| `Ø`        | empty set            | `Range("")`          |
-| `ℕ0`       | natural numbers      | `Range(":")`         |
+| `Ø`        | empty set            | `Ranges("")`         |
+| `ℕ0`       | natural numbers      | `Ranges(":")`        |

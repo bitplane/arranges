@@ -1,7 +1,6 @@
 # Iteration
 
-Both the `Range` and `Ranges` objects are sequences of integers that you can
-iterate over.
+`Ranges` objects are sequences of integers that you can iterate over.
 
 ```python
 from arranges import Ranges
@@ -24,9 +23,9 @@ import math
 import sys
 from arranges import Ranges, inf
 
-assert len(Range("1,2,3,4,10:20")) == 14
+assert len(Ranges("1,2,3,4,10:20")) == 14
 
-full = Range(":")
+full = Ranges(":")
 
 assert len(full) == sys.maxsize
 assert len(full) == inf
@@ -46,11 +45,10 @@ assert type(len(full)) is int
 Empty ranges are, of course, Falsey.
 
 ```python
-from arranges import Range, Ranges
+from arranges import Ranges
 
 assert Ranges(":")
 assert Range(10)
 
 assert not Ranges("")
-assert not Range("")
 ```

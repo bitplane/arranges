@@ -7,41 +7,38 @@ You can create them from:
 3. sequences of ints or these things, or other sequences
 4. explicitly, like you would create a `range` or `slice`
 
-Essentially, the constructor has `value` and `stop` fields. If `stop` is
-provided then `value` is assumed to be the `start`, otherwise it's assumed
-you want to convert the `value` from something else.
-
 ## Range from a string
 
 ```python
-from arranges import Range
+from arranges import Ranges
 
-# Create a range from a string. Like a slice but without the square brackets.
-the_full_range = Range(":")  # an endless sequence starting at 0
-the_empty_range = Range("")  # start, stop and len() are all 0
-from_0_to_99 = Range("0:100")
-skip_10_items = Range("10:")  # boundless, goes to infinity
-access_by_index = Range("0")  # just the first item
+# Create ranges from a string. Like a slice but without the square brackets.
+
+the_full_range = Ranges(":")  # an endless sequence starting at 0
+the_empty_range = Ranges("")  # start, stop and len() are all 0
+from_0_to_99 = Ranges("0:100")
+skip_10_items = Ranges("10:")  # boundless, goes to infinity
+access_by_index = Ranges("0")  # just the first item
 
 # Decimal, hexadecimal, octal and binary are supported. Note that octal uses
 # Python's 0o prefix, not 0 like in C.
-gbc_palette = Range("0xff68:0xff88")
-skip_bmp_header = Range("0o66:end")  # skip "54", "0x36" or "0b1100110" bytes
+gbc_palette = Ranges("0xff68:0xff88")
+skip_bmp_header = Ranges("0o66:end")  # skip "54", "0x36" or "0b1100110" bytes
 
 # "end" and "inf" are the same. You can also use "start" instead of 0.
-the_full_range_again = Range("start:inf")
+the_full_range_again = Ranges("start:inf")
 
 # whitespace is ignored during construction
-first_kilobyte = Range("start : 0x400")
+first_kilobyte = Ranges("start : 0x400")
 
 # They are simplified when converted to str, which they can be compared with.
 assert first_kilobyte == ":1024"
 
 # Comparisons work in both directions
-assert "000001:000002" == Range("1")
+assert "000001:000002" == Ranges("1")
 
 # and the hash is the same as the string
-w = Range("6 : 8")
+w = Ranges("6 : 8")
 assert hash(w) == hash("6:8")
 
 # so you can use them as dict keys
@@ -76,51 +73,42 @@ can pass it in as the value. If the `step` value is something other than None
 or 1 then it'll raise `ValueError`.
 
 ```python
-from arranges import Range
+from arranges import Ranges
 
-from_slice = Range(slice(10, 20))
-from_range = Range(range(10, 20))
-from_other = Range(Range("10:20"))
+from_slice = Ranges(slice(10, 20))
+from_range = Ranges(range(10, 20))
+from_other = Ranges(Ranges("10:20"))
 
 assert from_slice == from_range == from_other == "10:20"
 ```
 
 ## Ranges from sequences
 
-When creating a Range object from a sequence, it'll have to be in sequential
-order with no gaps. Duplicates are absorbed.
-
 ```python
-from arranges import Range
+from arranges import Ranges
 
 l = list(range(100))
 t = tuple(range(100))
 i = (i for i in range(100))
 
-assert Range(l) == Range(t) == Range(i) == ":100"
-```
-
-`Ranges` are much more forgiving:
-
-```python
-from arranges import Ranges
+assert Ranges(l) == Ranges(t) == Ranges(i) == ":100"
 
 jumble = Ranges([0, [2, 4], ["1:3"], 3, 4, range(10, 20)])
 
 assert jumble == "5,10:20"
 ```
 
-## Explicitly creating a Range
+## Explicitly creating Ranges
 
 You can create them in the same way as `range` or `slice` objects which have a
 slightly different syntax to slice notation.
 
 ```python
-from arranges import Range, inf
+from arranges import Ranges, inf
 
-assert Range(10, inf) == "10:"
+assert Ranges(10, inf) == "10:"
 
-# Range("10") is not the same as Range(10)
-assert Range(10) == ":10"
-assert Range("10") == 10 == Range(10, 11)
+# Ranges("10") is not the same as Ranges(10)
+assert Ranges(10) == ":10"
+assert Ranges("10") == 10 == Ranges(10, 11)
 ```

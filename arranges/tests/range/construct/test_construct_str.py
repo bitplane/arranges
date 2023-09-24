@@ -1,7 +1,6 @@
 import pytest
 
-from arranges.range import Range
-from arranges.utils import inf
+from arranges import Range, inf
 
 
 def test_too_many_values():
@@ -72,3 +71,20 @@ def test_empty_str():
 
     assert empty_range == empty_str_range
     assert len(empty_range) == len(empty_str_range) == 0
+
+
+def test_parse_single_range():
+    r = Range("1:10")
+    assert len(r.segments) == 1
+    assert r.segments[0].start == 1
+    assert r.segments[0].stop == 10
+
+
+def test_parse_multiple_ranges():
+    r = Range("1:10, 20:30")
+
+    assert len(r.segments) == 2
+    assert r.segments[0].start == 1
+    assert r.segments[0].stop == 10
+    assert r.segments[1].start == 20
+    assert r.segments[1].stop == 30

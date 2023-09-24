@@ -1,4 +1,4 @@
-from arranges.range import Range
+from arranges import Range
 
 
 def test_construct_from_range():

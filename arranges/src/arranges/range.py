@@ -3,7 +3,7 @@ from functools import lru_cache
 from typing import Any, Iterable
 
 from arranges.segment import Segment, range_idx
-from arranges.utils import is_intlike, is_iterable, is_rangelike, try_hash
+from arranges.utils import inf, is_intlike, is_iterable, is_rangelike, try_hash
 
 
 class Range(str):
@@ -40,7 +40,7 @@ class Range(str):
             return Segment(value, stop)
 
         if value is None:
-            raise TypeError("Got 0 arguments, expected 1 or 2")
+            return ""
 
         if is_intlike(value):
             return Segment(0, value)
@@ -165,7 +165,7 @@ class Range(str):
         Are all of the other ranges in our ranges?
         """
         combined = str(self + other)
-        return self and combined == self
+        return self and (combined == self)
 
     def __iter__(self):
         """
@@ -200,6 +200,39 @@ class Range(str):
         Return the union of this range and the other
         """
         return self.union(other)
+
+    def __and__(self, other: "Range") -> "Range":
+        """
+        Return the intersection of this range and the other
+        """
+        segments = []
+        for r in self.segments:
+            for o in other.segments:
+                if r.intersects(o):
+                    segments.append(r.intersection(o))
+        return Range(segments)
+
+    def __invert__(self):
+        """
+        The inverse of this range
+        """
+        if not self:
+            return Range(":")
+
+        segments = []
+
+        if self.first > 0:
+            segments.append(Segment(0, self.first))
+
+        for i in range(len(self.segments)):
+            if i == len(self.segments) - 1:
+                segments.append(Segment(self.segments[i].stop, inf))
+            else:
+                segments.append(
+                    Segment(self.segments[i].stop, self.segments[i + 1].start)
+                )
+
+        return Range(segments)
 
     @classmethod
     def validate(cls, value: Any) -> "Range":

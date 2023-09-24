@@ -8,7 +8,7 @@ range_idx = int | float
 
 
 def fix_start_stop(start: range_idx, stop: range_idx) -> tuple[range_idx, range_idx]:
-    start = 0 if start is None else int(start)
+    start = 0 if start is None else (int(start) if start != inf else inf)
     stop = inf if stop in (None, inf) else int(stop)
 
     if start > stop:

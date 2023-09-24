@@ -47,3 +47,15 @@ def test_duplicates():
 def test_negatives_not_allowed():
     with pytest.raises(ValueError):
         Range([1, 2, 3, -1, 4, 5])
+
+
+def test_from_sequence():
+    ranges = Range([1, 2, 3, 4])
+
+    assert ranges == Range("1:5")
+
+
+def test_from_nested_mess():
+    ranges = Range([[1, [2], ["101:201,30:31"], 3], range(10, 15)])
+
+    assert ranges == Range("1:4,10:15,30:31,101:201")

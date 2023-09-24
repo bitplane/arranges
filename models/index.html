@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../operators/">
       
       
-        <link rel="next" href="../construction/">
+        <link rel="next" href="../pydoc/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -239,35 +239,6 @@
       
   
   
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    Use in Pydantic models
-  </span>
-  
-
-      </a>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
   
     <li class="md-nav__item">
       <a href="../construction/" class="md-nav__link">
@@ -317,6 +288,35 @@
   
 
       </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Use in Pydantic models
+  </span>
+  
+
+      </a>
+      
     </li>
   
 
@@ -388,9 +388,13 @@ class BinaryPatch(BaseModel):
     regions: Ranges
 
 
-model = BinaryPatch.model_validate_json('{&quot;regions&quot;:&quot;0:10,20:30,15:&quot;}')
+model = BinaryPatch.model_validate_json(&quot;&quot;&quot;
+{
+    &quot;regions&quot;: &quot;0:10, 20:30, 15:, 0x0b&quot;
+}
+&quot;&quot;&quot;)
 
-assert model.input_range == &quot;:10,15:&quot;
+assert model.regions == &quot;:10,15:&quot;
 </code></pre>
 
 

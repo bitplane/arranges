@@ -5,3 +5,4 @@ __pycache__
 test-output.xml
 site/*
 docs/pydoc.md
+*.prof

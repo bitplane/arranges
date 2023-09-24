@@ -1,4 +1,4 @@
-from arranges import Range, Ranges
+from arranges.ranges import Ranges
 
 
 def test_collapse_ranges():
@@ -20,7 +20,7 @@ def test_combine_two_ranges():
 
 def test_combine_ranges_with_single_range():
     first = Ranges("1:10, 20:30")
-    second = Range("0:5")
+    second = Ranges("0:5")
     combined = first + second
     expected = Ranges("0:10,20:30")
 

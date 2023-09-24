@@ -94,3 +94,13 @@ def as_type(cls: Type[T], value: Any) -> T:
     if isinstance(value, cls):
         return value
     return cls(value)
+
+
+def try_hash(obj: Any) -> int | None:
+    """
+    Try to hash an object. If it can't be hashed, return None
+    """
+    try:
+        return hash(obj)
+    except TypeError:
+        return None

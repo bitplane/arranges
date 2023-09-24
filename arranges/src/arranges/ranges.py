@@ -6,13 +6,12 @@ from arranges.segment import Segment, range_idx
 from arranges.utils import inf, is_intlike, is_iterable, is_rangelike, try_hash
 
 
-class Range(str):
+class Ranges(str):
     """
     A range set that can be hashed and converted to a string.
     """
 
     segments: tuple[Segment]
-    step: int = 1
 
     def __init__(self, value: Any, stop: range_idx | None = None):
         """
@@ -37,7 +36,10 @@ class Range(str):
         stop_only = value is None and stop is not None
 
         if start_and_stop or stop_only:
-            return Segment(value, stop)
+            seg = Segment(value, stop)
+            print("ugh", value, stop, "equals", seg)
+
+            return seg
 
         if value is None:
             return ""
@@ -88,6 +90,7 @@ class Range(str):
         Convert an iterable of ranges to a string
         """
         hashable = tuple(iterable)
+        # contents might not be hashable
         if try_hash(hashable):
             vals = cls.from_hashable_iterable(hashable)
         else:
@@ -111,17 +114,17 @@ class Range(str):
         for item in iterable:
             if isinstance(item, Segment):
                 yield item
-            if isinstance(item, Range):
+            if isinstance(item, Ranges):
                 yield from item.segments
             elif isinstance(item, str):
                 if item:
-                    yield from [Segment.from_str(s) for s in Range.split_str(item)]
+                    yield from [Segment.from_str(s) for s in Ranges.split_str(item)]
             elif is_iterable(item):
-                yield from Range._flatten(item)
+                yield from Ranges._flatten(item)
             elif is_intlike(item):
                 yield Segment(item, item + 1)
             else:
-                yield from Range(item).segments
+                yield from Ranges(item).segments
 
     @classmethod
     def from_iterable(cls, iterable: Iterable) -> tuple[Segment]:
@@ -149,15 +152,15 @@ class Range(str):
         return super().__hash__()
 
     def __add__(self, other):
-        s = self.iterable_to_str(tuple([self, other]))
-        return Range(s)
+        s = self.iterable_to_str((self, [other]))
+        return Ranges(s)
 
     def __eq__(self, other: Any) -> bool:
         """
         Compare the two lists based on their string representations
         """
-        if not isinstance(other, Range):
-            other = Range(other)
+        if not isinstance(other, Ranges):
+            other = Ranges(other)
         return super().__eq__(other)
 
     def __contains__(self, other: Any) -> bool:
@@ -165,6 +168,10 @@ class Range(str):
         Are all of the other ranges in our ranges?
         """
         combined = str(self + other)
+        print("combined: ", combined)
+        print("self:", self)
+        print("other:", other)
+
         return self and (combined == self)
 
     def __iter__(self):
@@ -181,7 +188,7 @@ class Range(str):
         """
         True if this range overlaps with the other range
         """
-        other: Range = Range(other)
+        other: Ranges = Ranges(other)
         for r in self.segments:
             for o in other.segments:
                 if r.intersects(o):
@@ -189,19 +196,19 @@ class Range(str):
 
         return False
 
-    def union(self, other) -> "Range":
+    def union(self, other) -> "Ranges":
         """
         Return the union of this range and the other
         """
-        return Range(self + other)
+        return Ranges(self + other)
 
-    def __or__(self, other: "Range") -> "Range":
+    def __or__(self, other: "Ranges") -> "Ranges":
         """
         Return the union of this range and the other
         """
         return self.union(other)
 
-    def __and__(self, other: "Range") -> "Range":
+    def __and__(self, other: "Ranges") -> "Ranges":
         """
         Return the intersection of this range and the other
         """
@@ -210,14 +217,14 @@ class Range(str):
             for o in other.segments:
                 if r.intersects(o):
                     segments.append(r.intersection(o))
-        return Range(segments)
+        return Ranges(segments)
 
     def __invert__(self):
         """
         The inverse of this range
         """
         if not self:
-            return Range(":")
+            return Ranges(":")
 
         segments = []
 
@@ -232,10 +239,10 @@ class Range(str):
                     Segment(self.segments[i].stop, self.segments[i + 1].start)
                 )
 
-        return Range(segments)
+        return Ranges(segments)
 
     @classmethod
-    def validate(cls, value: Any) -> "Range":
+    def validate(cls, value: Any) -> "Ranges":
         """
         Validate a value and convert it to a Range
         """

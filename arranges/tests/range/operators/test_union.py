@@ -1,23 +1,23 @@
-from arranges import Range
+from arranges import Ranges
 
 
 def test_join():
-    assert Range("1:10").union(Range("5:15")) == Range("1:15")
-    assert Range(":10").union(Range("9:")) == Range(":")
+    assert Ranges("1:10").union(Ranges("5:15")) == Ranges("1:15")
+    assert Ranges(":10").union(Ranges("9:")) == Ranges(":")
 
 
 def test_join_adjacent():
-    assert Range("1:10").union(Range("10:15")) == Range("1:15")
-    assert Range("1:10").union(Range("0:1")) == Range("0:10")
+    assert Ranges("1:10").union(Ranges("10:15")) == Ranges("1:15")
+    assert Ranges("1:10").union(Ranges("0:1")) == Ranges("0:10")
 
 
 def test_intersects():
-    assert Range("1:10").intersects(Range("5:15"))
-    assert Range(":10").intersects(Range("9:"))
+    assert Ranges("1:10").intersects(Ranges("5:15"))
+    assert Ranges(":10").intersects(Ranges("9:"))
 
-    assert Range("5:10").intersects(Range(":"))
-    assert Range(":").intersects(Range(":"))
-    assert Range("1:100").intersects(Range("0:1000"))
+    assert Ranges("5:10").intersects(Ranges(":"))
+    assert Ranges(":").intersects(Ranges(":"))
+    assert Ranges("1:100").intersects(Ranges("0:1000"))
 
-    assert not Range("1:10").intersects(Range("11:15"))
-    assert not Range("1:10").intersects(Range("11:"))
+    assert not Ranges("1:10").intersects(Ranges("11:15"))
+    assert not Ranges("1:10").intersects(Ranges("11:"))

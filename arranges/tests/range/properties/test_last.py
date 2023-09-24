@@ -1,15 +1,15 @@
-from arranges import Range
+from arranges import Ranges
 from arranges.utils import inf
 
 
 def test_last_inf():
-    assert Range(":").last == inf
+    assert Ranges(":").last == inf
 
 
 def test_last_num():
-    assert Range(":10").last == 9
-    assert Range("10").last == 10
+    assert Ranges(":10").last == 9
+    assert Ranges("10").last == 10
 
 
 def test_last_empty():
-    assert Range("").last == -1
+    assert Ranges("").last == -1

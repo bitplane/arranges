@@ -1,5 +1,5 @@
-from arranges import Range
+from arranges import Ranges
 
 
 def test_none():
-    Range(None)
+    Ranges(None)

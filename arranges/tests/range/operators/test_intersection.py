@@ -1,11 +1,11 @@
-from arranges import Range
+from arranges import Ranges
 
 
-def r(s: str) -> Range:
+def r(s: str) -> Ranges:
     """
     Make a Range from a string.
     """
-    return Range([i for i, c in enumerate(s) if c != " "])
+    return Ranges([i for i, c in enumerate(s) if c != " "])
 
 
 def test_left_overlap():

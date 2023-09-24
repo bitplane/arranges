@@ -1,87 +1,87 @@
 import pytest
 
-from arranges import Range, inf
+from arranges import Ranges, inf
 
 
 def test_too_many_values():
     with pytest.raises(ValueError):
-        Range("1:2:3")
+        Ranges("1:2:3")
 
 
 def test_range_negative_start():
     with pytest.raises(ValueError):
-        Range("-1:2")
+        Ranges("-1:2")
 
 
 def test_range_negative_stop():
     with pytest.raises(ValueError):
-        Range("1:-2")
+        Ranges("1:-2")
 
 
 def test_range_no_first():
-    val = Range(":2")
+    val = Ranges(":2")
 
     assert val.first == 0
     assert val.last == 1
 
 
 def test_range_no_last():
-    val = Range("1:")
+    val = Ranges("1:")
 
     assert val.first == 1
     assert val.last == inf
 
 
 def test_range_no_start_no_last():
-    val = Range(":")
+    val = Ranges(":")
 
     assert val.first == 0
     assert val.last == inf
 
 
 def test_hex_range():
-    assert Range("0x1:0x10") == Range("1:16")
+    assert Ranges("0x1:0x10") == Ranges("1:16")
 
 
 def test_binary_range():
-    assert Range("0b0:0b100") == Range(":4")
+    assert Ranges("0b0:0b100") == Ranges(":4")
 
 
 def test_octal_range():
-    assert Range("0o0:0o10") == Range(":8")
+    assert Ranges("0o0:0o10") == Ranges(":8")
 
 
 def test_invalid_ints():
     with pytest.raises(ValueError):
-        Range("bleep:bloop")
+        Ranges("bleep:bloop")
 
 
 def test_full_range():
-    assert Range("0:inf") == Range(":")
+    assert Ranges("0:inf") == Ranges(":")
 
 
 def test_start_after_stop():
     with pytest.raises(ValueError):
-        Range("10:1")
+        Ranges("10:1")
 
 
 def test_empty_str():
-    empty_str_range = Range("")
-    empty_range = Range(0, 0)
+    empty_str_range = Ranges("")
+    empty_range = Ranges(0, 0)
 
     assert empty_range == empty_str_range
     assert len(empty_range) == len(empty_str_range) == 0
 
 
 def test_parse_single_range():
-    r = Range("1:10")
+    r = Ranges("1:10")
     assert len(r.segments) == 1
     assert r.segments[0].start == 1
     assert r.segments[0].stop == 10
 
 
 def test_parse_multiple_ranges():
-    r = Range("1:10, 20:30")
+    r = Ranges("1:10, 20:30")
 
     assert len(r.segments) == 2
     assert r.segments[0].start == 1

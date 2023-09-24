@@ -71,7 +71,7 @@ Type `make help` to see the other options, or run the one-liner scripts in the
 
 ## License
 
-Free as in freedom from legalese; the [WTFPL with a warranty clause](../LICENSE).
+Free as in freedom from legalese; the [WTFPL with a warranty clause](LICENSE.md).
 
 Political note: I don't want to live in a world where lawyers tell me how to
 speak. If you don't trust me enough to use the WTFPL then you shouldn't be

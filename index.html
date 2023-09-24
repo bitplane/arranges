@@ -518,42 +518,41 @@ flat and readable by humans.</p>
 package. The main feature is a pair of classes that can represent ranges:</p>
 <ul>
 <li><code>Segment</code> is a class that can be treated like a <code>set</code> and its constructor is
-  compatible with <code>range</code> and <code>slice</code>. It is derived from <code>str</code> so serializes
-  without custom JSON encoders. It is immutable, hashable and has a stable
+  compatible with <code>range</code> and <code>slice</code>. It is derived from <code>str</code> so is easy to
+  compare and serializes nicely. It is immutable, hashable and has a stable
   string representation.</li>
 <li><code>Ranges</code> is an ordered <code>tuple</code> of <code>Segment</code>s. It is also immutable and
-  derived from <code>str</code> so serializes without custom JSON encoders like the above.
-  It can be constructed from comma-separated Python-style slice notation strings
-  (e.g. <code>"1:10, 20:"</code>, <code>"0x00:0xff</code> and <code>":"</code>), integers, <code>slice</code>s, <code>range</code>s,
-  integers and (nested) iterables of the above.</li>
+  derived from <code>str</code> like the above. It can be constructed from comma-separated
+  Python-style slice notation strings (e.g. <code>"1:10, 20:"</code>, <code>"0x00:0xff</code> and
+  <code>":"</code>), integers, <code>slice</code>s, <code>range</code>s, integers and (nested) iterables of the
+  above.</li>
 <li>An <code>inf</code> singleton that is a <code>float</code> with a value of <code>math.inf</code> but has an
   <code>__index__</code> that returns <code>sys.maxsize</code> and compares equal to infinity and
   <code>maxsize</code>, and its string representation is <code>"inf"</code>.</li>
 </ul>
-<p>The range classes are designed to be used as fields in Pydantic <code>BaseModel</code>s,
-but they can be used anywhere you need a range. They are not designed with
-speed in mind, and comparisons usually use the canonical string form by
-converting other things into <code>Ranges</code> objects.</p>
+<p>The range class is designed to be used as fields in Pydantic <code>BaseModel</code>s,
+but can be used anywhere you need a range. They are not designed with speed in
+mind, and comparisons usually use the canonical string form by converting other
+things into <code>Ranges</code> objects. Their preferred pronoun is they/them.</p>
 <h2 id="constraints">Constraints</h2>
-<p>I made it to select lines or bytes in a stream of data, so it:</p>
+<p>I made them to select lines or bytes in a stream of data, so they:</p>
 <ul>
-<li>only supports <code>int</code>s;</li>
-<li>does not allow negative indices, the minimum is 0 and the maximum is
-  unbounded;</li>
-<li>it's compatible with <code>range</code> and <code>slice</code>, but <code>step</code> is fixed to <code>1</code>. If
+<li>only support <code>int</code>s;</li>
+<li>do not allow negative indices, the minimum is 0 and the maximum is unbounded;</li>
+<li>are compatible with <code>range</code> and <code>slice</code>, but <code>step</code> is fixed to <code>1</code>. If
   you pass something with a step into its constructor it'll be converted to
   a list of <code>int</code>s (<code>range(0, 10, 2)</code> becomes <code>"0,2,4,6,8"</code>);</li>
-<li>does not support duplicate ranges. Ranges are merged together as they are
+<li>do not support duplicate ranges. Ranges are merged together as they are
   added to the <code>Ranges</code> object;</li>
-<li>it is unpydantic in that its constructors are duck-typed, which is what I
-  need; and</li>
-<li>it violates the Zen of Python by having multiple ways to do the same thing,
-  but it's also useful.</li>
+<li>they are unpydantic in that its constructors are duck-typed, which is what I
+  need;</li>
+<li>they violates the Zen of Python by having multiple ways to do the same thing,
+  but I found that useful; and</li>
 <li>Currently the interface is <em>unstable</em>, so lock the exact version in if you
   don't want breaking changes.</li>
 </ul>
 <h2 id="installation">Installation</h2>
-<p><code>pip install arranges</code> if you want to use it. You'll need Python 3.10 or
+<p><code>pip install arranges</code> if you want to use them. You'll need Python 3.10 or
 above.</p>
 <h3 id="dev-setup">Dev setup</h3>
 <p>To add features etc you'll ideally need <code>git</code>, <code>make</code>, <code>bash</code> and something
@@ -566,7 +565,7 @@ that jazz.</p>
 <h2 id="usage">Usage</h2>
 <ul>
 <li><a href="https://bitplane.github.io/arranges/">RTFM</a></li>
-<li>Read <a href="../arranges/tests/">the tests</a>, which have full coverage.</li>
+<li>Read <a href="../arranges/tests/">the tests</a></li>
 <li><a href="../docs/pydocs.md">Read the pydocs</a></li>
 </ul>
 <h2 id="license">License</h2>

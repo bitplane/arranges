@@ -18,6 +18,7 @@ class Ranges(str):
         Construct a new string with the canonical form of the range.
         """
         self.segments = self.from_str(self)
+        print("init:", value, type(value), self.segments)
 
     def __new__(cls, value: Any, stop: range_idx | None = None) -> str:
         """
@@ -25,7 +26,9 @@ class Ranges(str):
 
         This becomes "self" in __init__, so we're always a string
         """
-        return str.__new__(cls, cls.construct_str(value, stop))
+        val = cls.construct_str(value, stop)
+        # print("new one!", value, stop, val)
+        return str.__new__(cls, val)
 
     @classmethod
     def construct_str(cls, value, stop) -> str:
@@ -36,15 +39,13 @@ class Ranges(str):
         stop_only = value is None and stop is not None
 
         if start_and_stop or stop_only:
-            seg = Segment(value, stop)
-            print("ugh", value, stop, "equals", seg)
-
-            return seg
+            return Segment(value, stop)
 
         if value is None:
             return ""
 
         if is_intlike(value):
+            print("value is intlike", value)
             return Segment(0, value)
 
         if is_rangelike(value):
@@ -100,7 +101,7 @@ class Ranges(str):
 
     @classmethod
     @lru_cache
-    def from_hashable_iterable(cls, value: tuple[Segment]) -> tuple[Segment]:
+    def from_hashable_iterable(cls, value: tuple[Any]) -> tuple[Segment]:
         """
         Cache the result of from_iterable
         """
@@ -152,7 +153,7 @@ class Ranges(str):
         return super().__hash__()
 
     def __add__(self, other):
-        s = self.iterable_to_str((self, [other]))
+        s = self.iterable_to_str((self, other))
         return Ranges(s)
 
     def __eq__(self, other: Any) -> bool:
@@ -212,12 +213,25 @@ class Ranges(str):
         """
         Return the intersection of this range and the other
         """
-        segments = []
-        for r in self.segments:
-            for o in other.segments:
-                if r.intersects(o):
-                    segments.append(r.intersection(o))
-        return Ranges(segments)
+        # Create a sorted list of all the boundary points from both ranges.
+        boundary_points = sorted(
+            set(
+                [s.start for s in self.segments]
+                + [s.stop for s in self.segments]
+                + [s.start for s in other.segments]
+                + [s.stop for s in other.segments]
+            )
+        )
+
+        # Use these boundary points to find intersecting segments.
+        intersected_segments = []
+        for i in range(len(boundary_points) - 1):
+            start, end = boundary_points[i], boundary_points[i + 1]
+            new_seg = Segment(start, end)
+            if new_seg in self and new_seg in other:
+                intersected_segments.append(new_seg)
+
+        return Ranges(intersected_segments)
 
     def __invert__(self):
         """

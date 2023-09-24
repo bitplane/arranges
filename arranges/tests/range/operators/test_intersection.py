@@ -70,3 +70,17 @@ def test_first_empty():
     b = " *** "
     c = ""
     assert r(a) & r(b) == r(c)
+
+
+def test_multi_split():
+    a = " ** ** **  *** *****"
+    b = "**     ***  ** **"
+    c = " *     **   ** **"
+    assert r(a) & r(b) == r(c)
+
+
+def test_multi_split_single():
+    a = " ** ** **  *** *****"
+    b = "*    *"
+    c = "     *"
+    assert r(a) & r(b) == r(c)

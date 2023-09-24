@@ -1,5 +1,3 @@
-import pytest
-
 from arranges import Range
 
 
@@ -23,8 +21,8 @@ def test_or_operator_empty_range():
 
 
 def test_or_operator_non_overlapping():
-    with pytest.raises(ValueError):
-        Range("1:10") | Range("11:15")
+    combined = Range("1:10") | Range("11:15")
+    assert combined == "1:10,11:15"
 
 
 def test_union_adjacent_ranges():

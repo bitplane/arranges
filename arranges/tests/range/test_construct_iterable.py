@@ -1,6 +1,6 @@
 import pytest
 
-from arranges import Range
+from arranges.range import Range
 
 
 def test_construct_from_list():
@@ -30,9 +30,10 @@ def test_construct_from_generator():
     assert actual == expected
 
 
-def test_no_holes_allowed():
-    with pytest.raises(ValueError):
-        Range([1, 2, 4, 5])
+def test_construct_with_hole():
+    expected = "1:3,4:6"
+    actual = Range([1, 2, 4, 5])
+    assert actual == expected
 
 
 def test_duplicates():

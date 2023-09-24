@@ -6,15 +6,19 @@ from arranges import Range
 def test_start_and_stop():
     r = Range(10, 20)
 
-    assert r.start == 10
-    assert r.stop == 20
+    assert r.first == 10
+    assert r.last == 19
+
+
+def test_length_1():
+    assert Range(1) == "0"
 
 
 def test_value_with_integer():
     r = Range(2)
 
-    assert r.start == 0
-    assert r.stop == 2
+    assert r.first == 0
+    assert r.last == 1
 
 
 def test_range_from_range():
@@ -34,7 +38,6 @@ def test_empty_range():
     empty2 = Range(100, 100)
 
     assert empty1 == empty2
-    assert empty1.start == empty1.stop == empty2.start == empty2.stop == 0
     assert empty1 == empty2 == ""
 
 

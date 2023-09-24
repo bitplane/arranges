@@ -1,6 +1,6 @@
 import pytest
 
-from arranges import Range
+from arranges.range import Range
 
 
 def test_contains_int():

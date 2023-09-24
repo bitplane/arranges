@@ -21,14 +21,3 @@ def test_intersects():
 
     assert not Range("1:10").intersects(Range("11:15"))
     assert not Range("1:10").intersects(Range("11:"))
-
-
-def test_isadjacent():
-    assert Range("1:10").isadjacent(Range("10:15"))
-    assert Range("1:10").isadjacent(Range("0:1"))
-
-
-def test_not_adjacent():
-    assert not Range("1:10").isadjacent(Range("0:10"))
-    assert not Range("1:10").isadjacent(Range("11:15"))
-    assert not Range("1:10").isadjacent(Range("11:"))

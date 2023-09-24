@@ -1,14 +1,7 @@
 import pytest
 
-from arranges import Range
+from arranges.range import Range
 from arranges.utils import inf
-
-
-def test_range():
-    val = Range("1:2")
-
-    assert val.start == 1
-    assert val.stop == 2
 
 
 def test_too_many_values():
@@ -26,25 +19,25 @@ def test_range_negative_stop():
         Range("1:-2")
 
 
-def test_range_no_start():
+def test_range_no_first():
     val = Range(":2")
 
-    assert val.start == 0
-    assert val.stop == 2
+    assert val.first == 0
+    assert val.last == 1
 
 
-def test_range_no_stop():
+def test_range_no_last():
     val = Range("1:")
 
-    assert val.start == 1
-    assert val.stop == inf
+    assert val.first == 1
+    assert val.last == inf
 
 
-def test_range_no_start_no_stop():
+def test_range_no_start_no_last():
     val = Range(":")
 
-    assert val.start == 0
-    assert val.stop == inf
+    assert val.first == 0
+    assert val.last == inf
 
 
 def test_hex_range():

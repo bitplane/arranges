@@ -19,15 +19,15 @@ def test_equality_str_left():
 
 
 def test_equality_int_right():
-    assert Range("0:1") == 0
-    assert Range("10:11") == 10
-    assert Range("11") == 11
+    assert Range("0:1") == [0]
+    assert Range("10:11") == [10]
+    assert Range("11") == [11]
 
 
 def test_equality_int_left():
-    assert 0 == Range("0:1")
-    assert 10 == Range("10:11")
-    assert 11 == Range("11")
+    assert [0] == Range("0:1")
+    assert [10] == Range("10:11")
+    assert [11] == Range("11")
 
 
 def test_equality_range_right():

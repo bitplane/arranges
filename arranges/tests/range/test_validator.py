@@ -14,15 +14,15 @@ class ModelWithRange(BaseModel):
 def test_working_range_str():
     model = ModelWithRange(range="1:10")
 
-    assert model.range.start == 1
-    assert model.range.stop == 10
+    assert model.range.first == 1
+    assert model.range.last == 9
 
 
 def test_working_range():
     model = ModelWithRange(range=Range("1:10"))
 
-    assert model.range.start == 1
-    assert model.range.stop == 10
+    assert model.range.first == 1
+    assert model.range.last == 9
 
 
 def test_invalid_range():
@@ -33,5 +33,5 @@ def test_invalid_range():
 def test_validate_range_object():
     model = ModelWithRange(range=range(10, 20))
 
-    assert model.range.start == 10
-    assert model.range.stop == 20
+    assert model.range.first == 10
+    assert model.range.last == 19

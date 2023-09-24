@@ -58,12 +58,6 @@ pages_2_to_5_and_20 = Ranges("2:6, 20")
 # The ranges are sorted and combined as they are added
 overlapping = Ranges("start:10, 14, 1:3")
 assert overlapping == ":10,14"
-
-# But you can't hash Ranges because they're mutable
-import pytest
-
-with pytest.raises(ValueError):
-    a = {overlapping: "whatever"}
 ```
 
 ## Ranges from range-like objects

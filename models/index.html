@@ -377,6 +377,7 @@
 
 
 <h1 id="use-in-pydantic-models">Use in Pydantic models</h1>
+<p>You'll need Pydantic &gt;=2.3:</p>
 <pre><code class="language-python">from pydantic import BaseModel, Field
 
 
@@ -384,10 +385,12 @@ class BinaryPatch(BaseModel):
     &quot;&quot;&quot;
 
     &quot;&quot;&quot;
-    regions: Ranges = Ranges(&quot;:&quot;)
+    regions: Ranges
 
 
+model = BinaryPatch.model_validate_json('{&quot;regions&quot;:&quot;0:10,20:30,15:&quot;}')
 
+assert model.input_range == &quot;:10,15:&quot;
 </code></pre>
 
 

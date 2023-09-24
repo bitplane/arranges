@@ -443,8 +443,7 @@
 
 
 <h1 id="iteration">Iteration</h1>
-<p>Both the <code>Range</code> and <code>Ranges</code> objects are sequences of integers that you can
-iterate over.</p>
+<p><code>Ranges</code> objects are sequences of integers that you can iterate over.</p>
 <pre><code class="language-python">from arranges import Ranges
 
 assert list(Ranges(&quot;start:3, 10&quot;)) == [0, 1, 2, 10]
@@ -460,9 +459,9 @@ as it only supports ints that are this size or smaller. When comparing <code>inf
 import sys
 from arranges import Ranges, inf
 
-assert len(Range(&quot;1,2,3,4,10:20&quot;)) == 14
+assert len(Ranges(&quot;1,2,3,4,10:20&quot;)) == 14
 
-full = Range(&quot;:&quot;)
+full = Ranges(&quot;:&quot;)
 
 assert len(full) == sys.maxsize
 assert len(full) == inf
@@ -478,13 +477,12 @@ assert type(len(full)) is int
 </code></pre>
 <h2 id="truthyness">Truthyness</h2>
 <p>Empty ranges are, of course, Falsey.</p>
-<pre><code class="language-python">from arranges import Range, Ranges
+<pre><code class="language-python">from arranges import Ranges
 
 assert Ranges(&quot;:&quot;)
 assert Range(10)
 
 assert not Ranges(&quot;&quot;)
-assert not Range(&quot;&quot;)
 </code></pre>
 
 

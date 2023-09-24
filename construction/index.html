@@ -492,35 +492,33 @@
 <li>sequences of ints or these things, or other sequences</li>
 <li>explicitly, like you would create a <code>range</code> or <code>slice</code></li>
 </ol>
-<p>Essentially, the constructor has <code>value</code> and <code>stop</code> fields. If <code>stop</code> is
-provided then <code>value</code> is assumed to be the <code>start</code>, otherwise it's assumed
-you want to convert the <code>value</code> from something else.</p>
 <h2 id="range-from-a-string">Range from a string</h2>
-<pre><code class="language-python">from arranges import Range
+<pre><code class="language-python">from arranges import Ranges
 
-# Create a range from a string. Like a slice but without the square brackets.
-the_full_range = Range(&quot;:&quot;)  # an endless sequence starting at 0
-the_empty_range = Range(&quot;&quot;)  # start, stop and len() are all 0
-from_0_to_99 = Range(&quot;0:100&quot;)
-skip_10_items = Range(&quot;10:&quot;)  # boundless, goes to infinity
-access_by_index = Range(&quot;0&quot;)  # just the first item
+# Create ranges from a string. Like a slice but without the square brackets.
+
+the_full_range = Ranges(&quot;:&quot;)  # an endless sequence starting at 0
+the_empty_range = Ranges(&quot;&quot;)  # start, stop and len() are all 0
+from_0_to_99 = Ranges(&quot;0:100&quot;)
+skip_10_items = Ranges(&quot;10:&quot;)  # boundless, goes to infinity
+access_by_index = Ranges(&quot;0&quot;)  # just the first item
 
 # Decimal, hexadecimal, octal and binary are supported. Note that octal uses
 # Python's 0o prefix, not 0 like in C.
-gbc_palette = Range(&quot;0xff68:0xff88&quot;)
-skip_bmp_header = Range(&quot;0o66:end&quot;)  # skip &quot;54&quot;, &quot;0x36&quot; or &quot;0b1100110&quot; bytes
+gbc_palette = Ranges(&quot;0xff68:0xff88&quot;)
+skip_bmp_header = Ranges(&quot;0o66:end&quot;)  # skip &quot;54&quot;, &quot;0x36&quot; or &quot;0b1100110&quot; bytes
 
 # &quot;end&quot; and &quot;inf&quot; are the same. You can also use &quot;start&quot; instead of 0.
-the_full_range_again = Range(&quot;start:inf&quot;)
+the_full_range_again = Ranges(&quot;start:inf&quot;)
 
 # whitespace is ignored during construction
-first_kilobyte = Range(&quot;start : 0x400&quot;)
+first_kilobyte = Ranges(&quot;start : 0x400&quot;)
 
 # They are simplified when converted to str, which they can be compared with.
 assert first_kilobyte == &quot;:1024&quot;
 
 # Comparisons work in both directions
-assert &quot;000001:000002&quot; == Range(&quot;1&quot;)
+assert &quot;000001:000002&quot; == Ranges(&quot;1&quot;)
 
 # and the hash is the same as the string
 w = Range(&quot;6 : 8&quot;)
@@ -555,23 +553,18 @@ or 1 then it'll raise <code>ValueError</code>.</p>
 
 from_slice = Range(slice(10, 20))
 from_range = Range(range(10, 20))
-from_other = Range(Range(&quot;10:20&quot;))
+from_other = Range(Ranges(&quot;10:20&quot;))
 
 assert from_slice == from_range == from_other == &quot;10:20&quot;
 </code></pre>
 <h2 id="ranges-from-sequences">Ranges from sequences</h2>
-<p>When creating a Range object from a sequence, it'll have to be in sequential
-order with no gaps. Duplicates are absorbed.</p>
-<pre><code class="language-python">from arranges import Range
+<pre><code class="language-python">from arranges import Ranges
 
 l = list(range(100))
 t = tuple(range(100))
 i = (i for i in range(100))
 
-assert Range(l) == Range(t) == Range(i) == &quot;:100&quot;
-</code></pre>
-<p><code>Ranges</code> are much more forgiving:</p>
-<pre><code class="language-python">from arranges import Ranges
+assert Ranges(l) == Ranges(t) == Ranges(i) == &quot;:100&quot;
 
 jumble = Ranges([0, [2, 4], [&quot;1:3&quot;], 3, 4, range(10, 20)])
 
@@ -580,9 +573,9 @@ assert jumble == &quot;5,10:20&quot;
 <h2 id="explicitly-creating-a-range">Explicitly creating a Range</h2>
 <p>You can create them in the same way as <code>range</code> or <code>slice</code> objects which have a
 slightly different syntax to slice notation.</p>
-<pre><code class="language-python">from arranges import Range, inf
+<pre><code class="language-python">from arranges import Ranges, inf
 
-assert Range(10, inf) == &quot;10:&quot;
+assert Ranges(10, inf) == &quot;10:&quot;
 
 # Range(&quot;10&quot;) is not the same as Range(10)
 assert Range(10) == &quot;:10&quot;

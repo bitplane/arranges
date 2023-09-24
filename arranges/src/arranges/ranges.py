@@ -45,7 +45,6 @@ class Ranges(str):
             return ""
 
         if is_intlike(value):
-            print("value is intlike", value)
             return Segment(0, value)
 
         if is_rangelike(value):
@@ -161,7 +160,11 @@ class Ranges(str):
         Compare the two lists based on their string representations
         """
         if not isinstance(other, Ranges):
-            other = Ranges(other)
+            # hack: bypass external constructor, use nested iterable
+            # otherwise we risk doing Ranges(int).
+            # todo: break _flatten out and separate internal and external
+            # constructors,
+            other = Ranges((other,))
         return super().__eq__(other)
 
     def __contains__(self, other: Any) -> bool:

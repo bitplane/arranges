@@ -68,6 +68,7 @@ class Segment(str):
         """
         if not other:
             return self
+
         if not self:
             return other
 
@@ -172,15 +173,6 @@ class Segment(str):
             return self.start == other.start and self.stop == other.stop
         except (TypeError, ValueError):
             return False
-
-    def union(self, *others) -> "Segment":
-        """
-        Return the union of this segment and the others
-        """
-        ret = self
-        for other in others:
-            ret = ret | other
-        return ret
 
     def isconnected(self, other: "Segment") -> bool:
         """

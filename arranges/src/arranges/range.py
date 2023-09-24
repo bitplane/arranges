@@ -138,7 +138,7 @@ class Range(str):
             current = segments[i]
             last = segments[i - 1]
             if last.isconnected(current):
-                segments[i - 1] = current.union(last)
+                segments[i - 1] = current | last
                 del segments[i]
                 i -= 1
             i += 1

@@ -1,14 +1,12 @@
 import pytest
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ConfigDict, ValidationError
 
 from arranges import Ranges
 
 
 class ModelWithRange(BaseModel):
     range: Ranges
-
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 def test_working_range_str():

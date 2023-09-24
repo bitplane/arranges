@@ -444,10 +444,11 @@
 
 <h1 id="iteration">Iteration</h1>
 <p><code>Ranges</code> objects are sequences of integers that you can iterate over.</p>
-<pre><code class="language-python">from arranges import Ranges
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">arranges</span> <span class="kn">import</span> <span class="n">Ranges</span>
 
-assert list(Ranges(&quot;start:3, 10&quot;)) == [0, 1, 2, 10]
-</code></pre>
+<span class="k">assert</span> <span class="nb">list</span><span class="p">(</span><span class="n">Ranges</span><span class="p">(</span><span class="s2">&quot;start:3, 10&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+</code></pre></div>
+
 <h2 id="cardinality-of-the-address-range">Cardinality of the address range</h2>
 <p>The length of a range is the number of elements it contains. But because ranges
 can be boundless, we have a special <code>inf</code> value that represents an infinite int
@@ -455,35 +456,36 @@ as Python doesn't have or support one.</p>
 <p>This value is <code>math.inf</code>, but when returned from <code>len</code> it becomes <code>sys.maxsize</code>
 as it only supports ints that are this size or smaller. When comparing <code>inf</code> to
 <code>sys.maxsize</code> it'll return <code>True</code>, but this doesn't work in all directions:</p>
-<pre><code class="language-python">import math
-import sys
-from arranges import Ranges, inf
+<div class="codehilite"><pre><span></span><code><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">arranges</span> <span class="kn">import</span> <span class="n">Ranges</span><span class="p">,</span> <span class="n">inf</span>
 
-assert len(Ranges(&quot;1,2,3,4,10:20&quot;)) == 14
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">Ranges</span><span class="p">(</span><span class="s2">&quot;1,2,3,4,10:20&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">14</span>
 
-full = Ranges(&quot;:&quot;)
+<span class="n">full</span> <span class="o">=</span> <span class="n">Ranges</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
 
-assert len(full) == sys.maxsize
-assert len(full) == inf
-assert sys.maxsize == inf
-assert full.stop == inf
-assert inf - 100 == sys.maxsize
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">full</span><span class="p">)</span> <span class="o">==</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">full</span><span class="p">)</span> <span class="o">==</span> <span class="n">inf</span>
+<span class="k">assert</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">==</span> <span class="n">inf</span>
+<span class="k">assert</span> <span class="n">full</span><span class="o">.</span><span class="n">stop</span> <span class="o">==</span> <span class="n">inf</span>
+<span class="k">assert</span> <span class="n">inf</span> <span class="o">-</span> <span class="mi">100</span> <span class="o">==</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span>
 
-# Careful though, this does not hold
-assert len(full) != math.inf
+<span class="c1"># Careful though, this does not hold</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">full</span><span class="p">)</span> <span class="o">!=</span> <span class="n">math</span><span class="o">.</span><span class="n">inf</span>
 
-# because it's an int
-assert type(len(full)) is int
-</code></pre>
+<span class="c1"># because it&#39;s an int</span>
+<span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">full</span><span class="p">))</span> <span class="ow">is</span> <span class="nb">int</span>
+</code></pre></div>
+
 <h2 id="truthyness">Truthyness</h2>
 <p>Empty ranges are, of course, Falsey.</p>
-<pre><code class="language-python">from arranges import Ranges
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">arranges</span> <span class="kn">import</span> <span class="n">Ranges</span>
 
-assert Ranges(&quot;:&quot;)
-assert Range(10)
+<span class="k">assert</span> <span class="n">Ranges</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">Range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
 
-assert not Ranges(&quot;&quot;)
-</code></pre>
+<span class="k">assert</span> <span class="ow">not</span> <span class="n">Ranges</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 
 

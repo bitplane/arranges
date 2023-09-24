@@ -378,24 +378,24 @@
 
 <h1 id="use-in-pydantic-models">Use in Pydantic models</h1>
 <p>You'll need Pydantic &gt;=2.3:</p>
-<pre><code class="language-python">from pydantic import BaseModel, Field
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
 
 
-class BinaryPatch(BaseModel):
-    &quot;&quot;&quot;
+<span class="k">class</span> <span class="nc">BinaryPatch</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 
-    &quot;&quot;&quot;
-    regions: Ranges
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">regions</span><span class="p">:</span> <span class="n">Ranges</span>
 
 
-model = BinaryPatch.model_validate_json(&quot;&quot;&quot;
-{
-    &quot;regions&quot;: &quot;0:10, 20:30, 15:, 0x0b&quot;
-}
-&quot;&quot;&quot;)
+<span class="n">model</span> <span class="o">=</span> <span class="n">BinaryPatch</span><span class="o">.</span><span class="n">model_validate_json</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;regions&quot;: &quot;0:10, 20:30, 15:, 0x0b&quot;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
 
-assert model.regions == &quot;:10,15:&quot;
-</code></pre>
+<span class="k">assert</span> <span class="n">model</span><span class="o">.</span><span class="n">regions</span> <span class="o">==</span> <span class="s2">&quot;:10,15:&quot;</span>
+</code></pre></div>
 
 
 

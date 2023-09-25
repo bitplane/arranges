@@ -63,8 +63,7 @@ assert overlapping == ":10,14"
 ## Ranges from range-like objects
 
 If it has a start, stop and step attribute then it quacks like a range so you
-can pass it in as the value. If the `step` value is something other than None
-or 1 then it'll raise `ValueError`.
+can pass it in as the value.
 
 ```python
 from arranges import Ranges

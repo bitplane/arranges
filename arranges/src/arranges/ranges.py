@@ -21,7 +21,6 @@ class Ranges(str):
         Construct a new string with the canonical form of the range.
         """
         self.segments = self.from_str(self)
-        print("init:", value, type(value), self.segments)
 
     def __new__(cls, value: Any, stop: range_idx | None = None) -> str:
         """
@@ -30,7 +29,6 @@ class Ranges(str):
         This becomes "self" in __init__, so we're always a string
         """
         val = cls.construct_str(value, stop)
-        # print("new one!", value, stop, val)
         return str.__new__(cls, val)
 
     @classmethod
@@ -175,9 +173,6 @@ class Ranges(str):
         Are all of the other ranges in our ranges?
         """
         combined = str(self + other)
-        print("combined: ", combined)
-        print("self:", self)
-        print("other:", other)
 
         return self and (combined == self)
 

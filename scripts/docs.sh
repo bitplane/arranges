@@ -13,7 +13,7 @@ COMMIT_MSG="Update arranges docs"
 
 mkdir -p docs/pydoc
 cd arranges/src
-pydoc-markdown -p uh_halp > ../../docs/pydoc/index.md
+pydoc-markdown -p arranges > ../../docs/pydoc/index.md
 cd ../..
 
 # Check out the main website repo

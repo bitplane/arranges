@@ -34,6 +34,12 @@ class _Boundless(float):
         """
         return self.huge
 
+    def __hash__(self) -> int:
+        """
+        Make this hashable so it can be used in sets
+        """
+        return hash(float(math.inf))
+
 
 inf = _Boundless(math.inf)
 """

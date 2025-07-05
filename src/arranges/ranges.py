@@ -152,6 +152,18 @@ class Ranges(str):
     def __hash__(self):
         return super().__hash__()
 
+    def __len__(self) -> int:
+        """
+        Get the total length of all ranges
+        """
+        return sum(len(segment) for segment in self.segments)
+
+    def __bool__(self) -> bool:
+        """
+        True if this range has any elements
+        """
+        return any(bool(segment) for segment in self.segments)
+
     def __add__(self, other):
         s = self.iterable_to_str((self, other))
         return Ranges(s)
@@ -233,6 +245,39 @@ class Ranges(str):
                 intersected_segments.append(new_seg)
 
         return Ranges(intersected_segments)
+
+    def __le__(self, other: "Ranges") -> bool:
+        """
+        Subset operator (<=): True if self is a subset of other
+        """
+        return self in other
+
+    def __lt__(self, other: "Ranges") -> bool:
+        """
+        Proper subset operator (<): True if self is a proper subset of other
+        """
+        return self in other and self != other
+
+    def __ge__(self, other: "Ranges") -> bool:
+        """
+        Superset operator (>=): True if self is a superset of other
+        """
+        return other in self
+
+    def __gt__(self, other: "Ranges") -> bool:
+        """
+        Proper superset operator (>): True if self is a proper superset of other
+        """
+        return other in self and self != other
+
+    def __sub__(self, other: "Ranges") -> "Ranges":
+        """
+        Relative complement operator (-): Return elements in self that are not in other
+        """
+        if not isinstance(other, Ranges):
+            other = Ranges(other)
+
+        return self & ~other
 
     def __invert__(self):
         """

@@ -1,8 +1,6 @@
 .venv
-.coverage
 __pycache__
-*/dist
-test-output.xml
-site/*
-docs/pydoc/index.md
-*.prof
+.coverage
+htmlcov
+dist
+coverage.json

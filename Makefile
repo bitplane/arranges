@@ -3,7 +3,7 @@
 		pre-commit update-pre-commit
 
 
-# SOURCE_FILES := $(shell find . -type f -name '*.py')
+PROJECT_NAME := arranges
 
 
 all: dev coverage  ## builds everything
@@ -13,10 +13,10 @@ install: .venv/.installed  ## installs the venv and the project packages
 dev: .venv/.installed-dev pre-commit  ## prepare local repo and venv for dev
 
 test: .venv/.installed-dev  ## run the project's tests
-	scripts/test.sh
+	scripts/test.sh $(PROJECT_NAME)
 
 coverage: .venv/.installed-dev scripts/coverage.sh  ## build the html coverage report
-	scripts/coverage.sh
+	scripts/coverage.sh $(PROJECT_NAME)
 
 docs: .docs/index.html ## build the documentation
 
@@ -29,21 +29,21 @@ update-pre-commit: scripts/update-pre-commit.sh  ## autoupdate pre-commit
 	scripts/update-pre-commit.sh
 
 dist: scripts/dist.sh ## build the distributable files
-	scripts/dist.sh
+	scripts/dist.sh $(PROJECT_NAME)
 
 release: scripts/release.sh ## publish to pypi
-	scripts/release.sh
+	scripts/release.sh $(PROJECT_NAME)
 
 # Caching doesn't work if we depend on PHONY targets
 
 .docs/index.html: .venv/.installed-dev scripts/docs.sh mkdocs.yml $(shell find -name '*.md')
-	scripts/docs.sh
+	scripts/docs.sh $(PROJECT_NAME)
 
-.venv/.installed: */pyproject.toml .venv/bin/activate scripts/install.sh $(shell find arranges -name '*.py')
-	scripts/install.sh
+.venv/.installed: pyproject.toml .venv/bin/activate scripts/install.sh $(shell find src -name '*.py')
+	scripts/install.sh $(PROJECT_NAME)
 
-.venv/.installed-dev: */pyproject.toml .venv/bin/activate scripts/install-dev.sh
-	scripts/install-dev.sh
+.venv/.installed-dev: pyproject.toml .venv/bin/activate scripts/install-dev.sh
+	scripts/install-dev.sh $(PROJECT_NAME)
 
 .venv/bin/activate:
 	scripts/venv.sh

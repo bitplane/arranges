@@ -1,1 +1,1 @@
-../arranges/README.md
+../README.md

@@ -2,4 +2,4 @@
 
 source .venv/bin/activate
 
-pytest --cov=arranges/src --cov-report=html .
+pytest --cov="src/$1" --cov-report=html .

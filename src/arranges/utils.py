@@ -1,6 +1,7 @@
 """
 Some quacky type helpers so we don't have to use isinstance everywhere
 """
+
 import math
 import sys
 from typing import Any, Type, TypeVar

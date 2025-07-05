@@ -3,18 +3,19 @@
 set -e
 
 # Variables
+PROJECT_NAME=$(basename "$(pwd)")
 REPO_URL="ssh://git@github.com/bitplane/bitplane.net.git"
 SRC_PATH="docs"
-DEST_PATH="dev/python/arranges"
-COMMIT_MSG="Update arranges docs"
+DEST_PATH="dev/python/$PROJECT_NAME"
+COMMIT_MSG="Update $PROJECT_NAME docs"
 
 # Build the pydocs
 . .venv/bin/activate
 
 mkdir -p docs/pydoc
-cd arranges/src
-pydoc-markdown -p arranges > ../../docs/pydoc/index.md
-cd ../..
+cd src
+pydoc-markdown -p "$PROJECT_NAME" > ../docs/pydoc/index.md
+cd ..
 
 # Check out the main website repo
 TMP_DIR=$(mktemp -d)

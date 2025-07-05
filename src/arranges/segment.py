@@ -202,6 +202,38 @@ class Segment(str):
 
         return False
 
+    def __lt__(self, other: "Segment") -> bool:
+        """
+        Compare segments by (start, stop) tuple
+        """
+        if not isinstance(other, Segment):
+            return NotImplemented
+        return (self.start, self.stop) < (other.start, other.stop)
+
+    def __le__(self, other: "Segment") -> bool:
+        """
+        Compare segments by (start, stop) tuple
+        """
+        if not isinstance(other, Segment):
+            return NotImplemented
+        return (self.start, self.stop) <= (other.start, other.stop)
+
+    def __gt__(self, other: "Segment") -> bool:
+        """
+        Compare segments by (start, stop) tuple
+        """
+        if not isinstance(other, Segment):
+            return NotImplemented
+        return (self.start, self.stop) > (other.start, other.stop)
+
+    def __ge__(self, other: "Segment") -> bool:
+        """
+        Compare segments by (start, stop) tuple
+        """
+        if not isinstance(other, Segment):
+            return NotImplemented
+        return (self.start, self.stop) >= (other.start, other.stop)
+
     def __contains__(self, other: Any) -> bool:
         """
         Membership test. Supports integers, strings, ranges and iterables.

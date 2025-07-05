@@ -150,6 +150,9 @@ class Ranges(str):
         return tuple(segments)
 
     def __hash__(self):
+        """
+        The hash of the string (which is what these things are)
+        """
         return super().__hash__()
 
     def __len__(self) -> int:

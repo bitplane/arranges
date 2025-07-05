@@ -322,8 +322,14 @@ class Ranges(str):
 
     @property
     def first(self):
+        """
+        The start value of the first segment
+        """
         return self.segments[0].start
 
     @property
     def last(self):
+        """
+        The last value of the final segment
+        """
         return self.segments[-1].last

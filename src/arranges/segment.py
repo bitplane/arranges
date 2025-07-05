@@ -206,33 +206,45 @@ class Segment(str):
         """
         Compare segments by (start, stop) tuple
         """
-        if not isinstance(other, Segment):
+        try:
+            if not isinstance(other, Segment):
+                other = as_type(Segment, other)
+            return (self.start, self.stop) < (other.start, other.stop)
+        except (TypeError, ValueError):
             return NotImplemented
-        return (self.start, self.stop) < (other.start, other.stop)
 
     def __le__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        if not isinstance(other, Segment):
+        try:
+            if not isinstance(other, Segment):
+                other = as_type(Segment, other)
+            return (self.start, self.stop) <= (other.start, other.stop)
+        except (TypeError, ValueError):
             return NotImplemented
-        return (self.start, self.stop) <= (other.start, other.stop)
 
     def __gt__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        if not isinstance(other, Segment):
+        try:
+            if not isinstance(other, Segment):
+                other = as_type(Segment, other)
+            return (self.start, self.stop) > (other.start, other.stop)
+        except (TypeError, ValueError):
             return NotImplemented
-        return (self.start, self.stop) > (other.start, other.stop)
 
     def __ge__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        if not isinstance(other, Segment):
+        try:
+            if not isinstance(other, Segment):
+                other = as_type(Segment, other)
+            return (self.start, self.stop) >= (other.start, other.stop)
+        except (TypeError, ValueError):
             return NotImplemented
-        return (self.start, self.stop) >= (other.start, other.stop)
 
     def __contains__(self, other: Any) -> bool:
         """

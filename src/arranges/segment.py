@@ -150,6 +150,44 @@ class Segment(str):
         """
         return value.start, value.stop
 
+    @staticmethod
+    def _coerce(other: Any) -> Any:
+        """
+        Coerce other to Segment if possible.
+        Returns the original value if already a Segment.
+        For Ranges, only convert if it's a single-segment range.
+        """
+        # circular :(
+        from arranges import Ranges
+
+        if isinstance(other, Segment):
+            return other
+
+        if isinstance(other, Ranges):
+            # Only convert single-segment Ranges to Segment for comparison
+            if len(other.segments) == 1:
+                seg = other.segments[0]
+                return Segment(seg.start, seg.stop)
+            return other
+
+        # Special handling for integers - treat as single value [n, n+1)
+        if is_intlike(other):
+            return Segment(int(other), int(other) + 1)
+
+        # Handle strings - use from_str to parse correctly
+        if isinstance(other, str):
+            return Segment.from_str(other)
+
+        # Handle Python range objects
+        if isinstance(other, range):
+            return Segment(other.start, other.stop)
+
+        # Try to convert to Segment
+        try:
+            return as_type(Segment, other)
+        except (TypeError, ValueError):
+            return other
+
     def isdisjoint(self, other: Any) -> bool:
         """
         Return True if this range is disjoint from the other range
@@ -161,6 +199,9 @@ class Segment(str):
         """
         Compare two segments
         """
+        # circular :(
+        from arranges import Ranges
+
         if is_intlike(other):
             return self.start == other and self.stop == other + 1
         if isinstance(other, str):
@@ -168,11 +209,14 @@ class Segment(str):
         if not self and not other:
             return True
 
-        try:
-            other = as_type(Segment, other)
+        # Special handling for Ranges to use its equality logic
+        if isinstance(other, Ranges):
+            return other == self
+
+        other = self._coerce(other)
+        if isinstance(other, Segment):
             return self.start == other.start and self.stop == other.stop
-        except (TypeError, ValueError):
-            return False
+        return False
 
     def isconnected(self, other: "Segment") -> bool:
         """
@@ -206,45 +250,37 @@ class Segment(str):
         """
         Compare segments by (start, stop) tuple
         """
-        try:
-            if not isinstance(other, Segment):
-                other = as_type(Segment, other)
+        other = self._coerce(other)
+        if isinstance(other, Segment):
             return (self.start, self.stop) < (other.start, other.stop)
-        except (TypeError, ValueError):
-            return NotImplemented
+        return NotImplemented
 
     def __le__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        try:
-            if not isinstance(other, Segment):
-                other = as_type(Segment, other)
+        other = self._coerce(other)
+        if isinstance(other, Segment):
             return (self.start, self.stop) <= (other.start, other.stop)
-        except (TypeError, ValueError):
-            return NotImplemented
+        return NotImplemented
 
     def __gt__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        try:
-            if not isinstance(other, Segment):
-                other = as_type(Segment, other)
+        other = self._coerce(other)
+        if isinstance(other, Segment):
             return (self.start, self.stop) > (other.start, other.stop)
-        except (TypeError, ValueError):
-            return NotImplemented
+        return NotImplemented
 
     def __ge__(self, other: "Segment") -> bool:
         """
         Compare segments by (start, stop) tuple
         """
-        try:
-            if not isinstance(other, Segment):
-                other = as_type(Segment, other)
+        other = self._coerce(other)
+        if isinstance(other, Segment):
             return (self.start, self.stop) >= (other.start, other.stop)
-        except (TypeError, ValueError):
-            return NotImplemented
+        return NotImplemented
 
     def __contains__(self, other: Any) -> bool:
         """

@@ -3,7 +3,7 @@ from arranges import Segment
 
 
 def test_union_with_empty_segment():
-    """Test union when one segment is empty (covers line 73)"""
+    """Test union when one segment is empty"""
     s1 = Segment(1, 5)
     s2 = Segment(0, 0)  # Empty segment
 
@@ -13,7 +13,7 @@ def test_union_with_empty_segment():
 
 
 def test_union_when_self_is_empty():
-    """Test union when self is empty (covers line 70)"""
+    """Test union when self is empty"""
     s1 = Segment(0, 0)  # Empty segment
     s2 = Segment(1, 5)
 
@@ -21,7 +21,7 @@ def test_union_when_self_is_empty():
 
 
 def test_union_with_non_connected_segments():
-    """Test union with segments that aren't touching (covers line 76)"""
+    """Test union with segments that aren't touching"""
     s1 = Segment(1, 5)
     s2 = Segment(10, 15)
 

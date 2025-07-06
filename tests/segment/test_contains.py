@@ -3,7 +3,7 @@ from arranges import Segment
 
 
 def test_contains_with_empty_segment():
-    """Test __contains__ with empty segment (covers line 293)"""
+    """Test __contains__ with empty segment"""
     empty = Segment(0, 0)
 
     # Nothing is contained in an empty segment
@@ -15,7 +15,7 @@ def test_contains_with_empty_segment():
 
 
 def test_contains_with_string():
-    """Test __contains__ with string arguments (covers lines 305-306)"""
+    """Test __contains__ with string arguments"""
     s = Segment(5, 15)
 
     # String representing a segment within
@@ -35,7 +35,7 @@ def test_contains_with_string():
 
 
 def test_contains_with_iterable():
-    """Test __contains__ with iterable arguments (covers lines 308-312)"""
+    """Test __contains__ with iterable arguments"""
     s = Segment(5, 15)
 
     # List of values all within
@@ -59,7 +59,7 @@ def test_contains_with_iterable():
 
 
 def test_contains_with_unsupported_type():
-    """Test __contains__ with unsupported types (covers line 314)"""
+    """Test __contains__ with unsupported types"""
     s = Segment(5, 15)
 
     # Non-iterable object should raise TypeError

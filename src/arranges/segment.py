@@ -203,7 +203,6 @@ class Segment(str):
         Compare two segments
         """
         # circular :(
-        from arranges import Ranges
 
         if is_intlike(other):
             return self.start == other and self.stop == other + 1
@@ -212,14 +211,11 @@ class Segment(str):
         if not self and not other:
             return True
 
-        # Special handling for Ranges to use its equality logic
-        if isinstance(other, Ranges):
-            return other == self
-
         other = self._coerce(other)
         if isinstance(other, Segment):
             return self.start == other.start and self.stop == other.stop
-        return False
+        # _coerce should always return a Segment for anything that gets here
+        return False  # pragma: no cover
 
     def isconnected(self, other: "Segment") -> bool:
         """

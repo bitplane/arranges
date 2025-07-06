@@ -2,7 +2,7 @@ from arranges import Segment, Ranges
 
 
 def test_equality_with_empty_segments():
-    """Test equality when both segments are empty (covers line 209)"""
+    """Test equality when both segments are empty"""
     s1 = Segment(0, 0)
     s2 = Segment(0, 0)
 
@@ -15,7 +15,7 @@ def test_equality_with_empty_segments():
 
 
 def test_equality_with_ranges():
-    """Test equality with Ranges objects (covers lines 213-214)"""
+    """Test equality with Ranges objects"""
     s = Segment(5, 10)
 
     # Single-segment Ranges
@@ -36,7 +36,7 @@ def test_equality_with_ranges():
 
 
 def test_equality_after_coercion():
-    """Test equality with objects that get coerced (covers lines 216-219)"""
+    """Test equality with objects that get coerced"""
     s = Segment(5, 10)
 
     # Range object
@@ -89,3 +89,25 @@ def test_equality_with_string():
 
     assert Segment(5, 10) != "5:11"
     assert "5:11" != Segment(5, 10)
+
+
+def test_equality_with_unconvertible_objects():
+    """Test equality with objects that can't be coerced"""
+    s = Segment(5, 10)
+
+    # Objects that can't be converted to Segment should return False
+    assert s != object()
+    assert s != {"not": "convertible"}
+
+    # Function objects can't be converted to Segment
+    def func(x):
+        return x
+
+    assert s != func
+
+    # Custom class that won't be converted
+    class UnconvertibleClass:
+        pass
+
+    obj = UnconvertibleClass()
+    assert s != obj  # Should hit the return False line

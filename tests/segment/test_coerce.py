@@ -2,7 +2,7 @@ from arranges import Segment, Ranges
 
 
 def test_coerce_with_multi_segment_ranges():
-    """Test _coerce with multi-segment Ranges (covers line 171)"""
+    """Test _coerce with multi-segment Ranges"""
     # Create a multi-segment Ranges
     ranges = Ranges("1:5,10:15,20:25")
 
@@ -23,7 +23,7 @@ def test_coerce_with_single_segment_ranges():
 
 
 def test_comparison_with_multi_segment_ranges_returns_not_implemented():
-    """Test comparison operators return NotImplemented for multi-segment Ranges (covers lines 265, 283)"""
+    """Test comparison operators return NotImplemented for multi-segment Ranges"""
     segment = Segment(5, 10)
     ranges = Ranges("1:3,15:20")
 

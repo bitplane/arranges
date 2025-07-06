@@ -192,7 +192,10 @@ class Segment(str):
         """
         Return True if this range is disjoint from the other range
         """
-        other = as_type(Segment, other)
+        if isinstance(other, str):
+            other = Segment.from_str(other)
+        else:
+            other = as_type(Segment, other)
         return not self.intersects(other)
 
     def __eq__(self, other: Any) -> bool:
@@ -286,11 +289,19 @@ class Segment(str):
         """
         Membership test. Supports integers, strings, ranges and iterables.
         """
+        # circular :(
+        from arranges import Ranges
+
         if is_intlike(other):
             return self.start <= other <= self.last
 
         if not self:  # nothing fits in an empty set
             return False
+
+        # Check for Ranges before rangelike/iterable
+        if isinstance(other, Ranges):
+            # Delegate to Ranges' logic
+            return other in Ranges(self)
 
         if is_rangelike(other):
             if not other:
@@ -303,7 +314,7 @@ class Segment(str):
             return start_inside and last_inside
 
         if isinstance(other, str):
-            return self.__class__(other) in self
+            return self.__class__.from_str(other) in self
 
         if is_iterable(other):
             for o in other:

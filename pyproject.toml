@@ -1,7 +1,7 @@
 [project]
 name = "arranges"
 description = "Mergable range object for use in Pydantic classes"
-version = "0.1.2"
+version = "0.2.1"
 authors = [
     { name = "Gareth Davidson", email = "gaz@bitplane.net" }
 ]
@@ -21,7 +21,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "pydantic==2.3.0",
+    "pydantic",
     "flake8",
     "pre-commit",
     "pytest",

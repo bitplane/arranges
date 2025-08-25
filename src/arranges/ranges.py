@@ -2,8 +2,13 @@ import re
 from functools import lru_cache
 from typing import Any, Iterable
 
-from pydantic import GetCoreSchemaHandler
-from pydantic_core import CoreSchema, core_schema
+try:
+    from pydantic import GetCoreSchemaHandler
+    from pydantic_core import CoreSchema, core_schema
+
+    PYDANTIC = True
+except ImportError:
+    PYDANTIC = False
 
 from arranges.segment import Segment, range_idx
 from arranges.utils import inf, is_intlike, is_iterable, is_rangelike, try_hash
@@ -314,14 +319,16 @@ class Ranges(str):
 
         return cls(value)
 
-    @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source_type: Any, handler: GetCoreSchemaHandler
-    ) -> CoreSchema:
-        """
-        For automatic validation in pydantic
-        """
-        return core_schema.no_info_after_validator_function(cls, handler(Any))
+    if PYDANTIC:
+
+        @classmethod
+        def __get_pydantic_core_schema__(
+            cls, source_type: Any, handler: GetCoreSchemaHandler
+        ) -> CoreSchema:
+            """
+            For automatic validation in pydantic
+            """
+            return core_schema.no_info_after_validator_function(cls, handler(Any))
 
     @property
     def first(self):

@@ -188,6 +188,15 @@ class Ranges(str):
             other = Ranges((other,))
         return super().__eq__(other)
 
+    def __getitem__(self, key):
+        """
+        Support slicing and indexing of ranges.
+        """
+        if is_intlike(key) and key in self:
+            return key
+        else:
+            return Ranges(key) & self
+
     def __contains__(self, other: Any) -> bool:
         """
         Are all of the other ranges in our ranges?

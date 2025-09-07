@@ -5,7 +5,7 @@ in my `merge-files` app, in a way that I can just drop it in as a string field
 type. The reason for this is so the machine-generated command line help is
 flat and readable by humans.
 
-It it kinda grew into a monster so I've split it out into this separate
+It kinda grew into a monster, so I've split it out into this separate
 package. The main feature is a pair of classes that can represent ranges:
 
 * ⛓️ `Segment` is a class that can be treated like a `set` and its constructor is
@@ -44,7 +44,7 @@ See the tests for executable documentation
 ### 🔗 Links
 
 * [🐱 github](https://github.com/bitplane/arranges)
-* [🐍 pypi](https://pypi.org/arranges)
+* [🐍 pypi](https://pypi.org/project/arranges/)
 * [🏠 home](https://bitplane.net/dev/python/arranges)
 
 ## ⚠️ Constraints

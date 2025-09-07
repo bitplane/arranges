@@ -1,4 +1,4 @@
-# Constructing Range and Ranges
+# Constructing Ranges and Segments
 
 You can create them from:
 

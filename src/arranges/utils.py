@@ -113,6 +113,14 @@ def try_hash(obj: Any) -> int | None:
         return None
 
 
+def force_hash(value):
+    """Force a hash for any value, using str() fallback for unhashable types"""
+    try:
+        return hash(value)
+    except TypeError:
+        return hash(str(value))
+
+
 def as_key(k):
     """
     Convert a key to a Ranges object.

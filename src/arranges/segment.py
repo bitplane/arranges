@@ -22,7 +22,7 @@ def fix_start_stop(start: range_idx, stop: range_idx) -> tuple[range_idx, range_
 
 def start_stop_to_str(start: range_idx, stop: range_idx) -> str:
     """
-    Returns a string representation of a range from start to stop.
+    Returns a string representation of a segment from start to stop.
     """
     start, stop = fix_start_stop(start, stop)
 
@@ -49,13 +49,13 @@ class Segment(str):
 
     def __init__(self, start: range_idx, stop: range_idx = None):
         """
-        Construct a new string with the canonical form of the range.
+        Construct a new string with the canonical form of the segment.
         """
         self.start, self.stop = fix_start_stop(start, stop)
 
     def __new__(cls, start: range_idx, stop: range_idx = None) -> str:
         """
-        Construct a new string with the canonical form of the range.
+        Construct a new string with the canonical form of the segment.
         """
         return str.__new__(cls, start_stop_to_str(start, stop))
 
@@ -64,7 +64,7 @@ class Segment(str):
 
     def __or__(self, other: "Segment") -> "Segment":
         """
-        Return the union of this range and the other range
+        Return the union of this segment and the other one
         """
         if not other:
             return self
@@ -82,7 +82,7 @@ class Segment(str):
 
     def __iter__(self):
         """
-        Iterate over the values in this range
+        Iterate over the values in this segment
         """
         i = self.start
         while i < self.stop:
@@ -91,7 +91,7 @@ class Segment(str):
 
     def __len__(self) -> int:
         """
-        Get the length of this range
+        Get the length of this segment
         """
         if self.start == self.stop:
             return 0
@@ -103,14 +103,14 @@ class Segment(str):
 
     def __bool__(self) -> bool:
         """
-        True if this range has a length
+        True if we have a length
         """
         return len(self) > 0
 
     @property
     def last(self) -> int:
         """
-        Gets the last value in this range. Will return inf if the range
+        Gets the last value in this range. Will return inf if the segment
         has no end, and -1 if it has no contents,
         """
         if not self:
@@ -146,7 +146,7 @@ class Segment(str):
     @staticmethod
     def sort_key(value: "Segment") -> tuple[int, int]:
         """
-        Sort key function for sorting ranges
+        Sort key function for sorting range segments
         """
         return value.start, value.stop
 
@@ -219,8 +219,8 @@ class Segment(str):
 
     def isconnected(self, other: "Segment") -> bool:
         """
-        True if this range is adjacent to or overlaps the other range, and so they
-        can be joined together.
+        True if this range is adjacent to or overlaps the other segment,
+        so they can be joined together.
         """
         return self.isadjacent(other) or self.intersects(other)
 

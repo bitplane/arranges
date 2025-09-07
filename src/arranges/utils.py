@@ -111,3 +111,19 @@ def try_hash(obj: Any) -> int | None:
         return hash(obj)
     except TypeError:
         return None
+
+
+def as_key(k):
+    """
+    Convert a key to a Ranges object.
+
+    A lot of the time we'll have N when we don't mean ":N"
+    So this converts keys to ranges, but not int-like objects.
+    """
+    # circular :(
+    from .ranges import Ranges
+
+    if is_intlike(k):
+        return Ranges(k, k + 1)
+    else:
+        return Ranges(k)

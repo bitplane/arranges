@@ -1,3 +1,4 @@
+import pytest
 from arranges import Ranges
 
 
@@ -18,9 +19,8 @@ def test_construct_from_slice_step_1():
 
 
 def test_construct_from_range_with_step():
-    actual = Ranges(range(10, 20, 2))
-    expected = "10,12,14,16,18"
-    assert actual == expected
+    with pytest.raises(ValueError, match="Stepped ranges not supported"):
+        Ranges(range(10, 20, 2))
 
 
 def def_construct_boundless_slice():

@@ -57,8 +57,10 @@ class Ranges(str):
             if not value.step or value.step == 1:
                 return Segment(value.start, value.stop)
             else:
-                stepped_range = list(value)
-                return cls.iterable_to_str(stepped_range)
+                raise ValueError(
+                    f"Stepped ranges not supported: {value}. "
+                    f"Use discrete ranges like '0,2,4,6,8' instead."
+                )
 
         if hasattr(value, "segments"):
             return ",".join(value.segments)
@@ -342,13 +344,15 @@ class Ranges(str):
     @property
     def first(self):
         """
-        The start value of the first segment
+        The start value of the first segment.
+        Called "first" rather than "start" so that Ranges are not "range-like" things.
         """
         return self.segments[0].start
 
     @property
     def last(self):
         """
-        The last value of the final segment
+        The last value of the final segment.
+        Exposing "last" rather than "stop" so that Ranges are not "range-like" things.
         """
         return self.segments[-1].last

@@ -20,8 +20,9 @@ package. The main feature is a pair of classes that can represent ranges:
 * ♾️ An `inf` singleton that is a `float` with a value of `math.inf` but has an
   `__index__` that returns `sys.maxsize` and compares equal to infinity and
   `maxsize`, and its string representation is `"inf"`.
+* 📕 A `Dict` that is keyed by `Ranges` and holds one per unique value.
 
-The range class is designed to be used as fields in Pydantic `BaseModel`s,
+The Ranges class is designed to be used as fields in Pydantic `BaseModel`s,
 but can be used anywhere you need a range. They are not designed with speed in
 mind, and comparisons usually use the canonical string form by converting other
 things into `Ranges` objects. Their preferred pronoun is they/them.

@@ -39,5 +39,4 @@ requires = ["flit_core >=3.2,<4"]
 
 [project.urls]
 "Homepage" = "https://github.com/bitplane/arranges"
-"Bug Tracker" = "https://github.com/bitplane/merge-files/arranges"
-
+"Bug Tracker" = "https://github.com/bitplane/arranges/issues"

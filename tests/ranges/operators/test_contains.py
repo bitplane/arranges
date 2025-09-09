@@ -1,5 +1,3 @@
-import pytest
-
 from arranges import Ranges
 
 
@@ -36,17 +34,20 @@ def test_nothing_in_empty():
     assert Ranges("") not in Ranges("")
 
 
-def test_contains_text_error():
-    with pytest.raises(ValueError):
-        "hello" in Ranges(":")
+def test_contains_invalid_text():
+    """Text that isn't a valid range should return False, not raise."""
+    assert "hello" not in Ranges(":")
+    assert "world" not in Ranges("1:10")
 
 
-def test_contains_unsupported_type_error():
+def test_contains_unsupported_type():
+    """Unsupported types should return False, not raise."""
+
     class Crash:
         pass
 
-    with pytest.raises(TypeError):
-        Crash() in Ranges(":")
+    assert Crash() not in Ranges(":")
+    assert Crash() not in Ranges("1:10")
 
 
 def test_contains_int():
@@ -62,6 +63,18 @@ def test_contains_int():
     assert 100 in range
     assert 149 in range
     assert 150 not in range
+
+
+def test_negative_integers_not_contained():
+    """Negative integers should not raise; simply return False."""
+    assert -1 not in Ranges(10)
+    assert -100 not in Ranges(":")
+
+
+def test_invalid_string_not_contained():
+    """Invalid range strings should return False or raise appropriately."""
+    assert "not a range" not in Ranges(0, 10)
+    assert "hello world" not in Ranges("1:10")
 
 
 def test_contains_sequence():

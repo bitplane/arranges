@@ -64,3 +64,11 @@ def test_not_equal_to_unknown_type():
         pass
 
     assert Ranges(":") != Unknown()
+
+
+def test_not_equal_to_invalid_strings():
+    """Invalid strings should return False for equality, not raise."""
+    assert Ranges(10) != "not a range"
+    assert "not a range" != Ranges(10)
+    assert Ranges("1:10") != "hello world"
+    assert "a" != Ranges(10)

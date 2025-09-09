@@ -187,7 +187,10 @@ class Ranges(str):
             # otherwise we risk doing Ranges(int).
             # todo: break _flatten out and separate internal and external
             # constructors,
-            other = Ranges((other,))
+            try:
+                other = Ranges((other,))
+            except (ValueError, TypeError):
+                return NotImplemented
         return super().__eq__(other)
 
     def __getitem__(self, key):
@@ -203,9 +206,11 @@ class Ranges(str):
         """
         Are all of the other ranges in our ranges?
         """
-        combined = str(self + other)
-
-        return self and (combined == self)
+        try:
+            combined = str(self + other)
+            return self and (combined == self)
+        except (ValueError, TypeError):
+            return False
 
     def __iter__(self):
         """

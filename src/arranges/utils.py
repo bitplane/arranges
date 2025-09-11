@@ -40,6 +40,40 @@ class _Boundless(float):
         """
         return hash(float(math.inf))
 
+    def __sub__(self, other):
+        """
+        Subtraction that preserves _Boundless type
+        """
+        result = float.__sub__(self, other)
+        if math.isinf(result):
+            return self
+        else:
+            return result
+
+    def __rsub__(self, other):
+        """
+        Right subtraction
+        """
+        result = float.__rsub__(self, other)
+        if math.isinf(result):
+            return _Boundless(result)
+        return result
+
+    def __add__(self, other):
+        """
+        Addition that preserves _Boundless type
+        """
+        result = float.__add__(self, other)
+        if math.isinf(result):
+            return self
+        return result
+
+    def __radd__(self, other):
+        """
+        Right addition
+        """
+        return self.__add__(other)
+
 
 inf = _Boundless(math.inf)
 """

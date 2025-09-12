@@ -72,3 +72,52 @@ def test_not_equal_to_invalid_strings():
     assert "not a range" != Ranges(10)
     assert Ranges("1:10") != "hello world"
     assert "a" != Ranges(10)
+
+
+def test_eq_returns_notimplemented_on_valueerror():
+    """Test that Ranges.__eq__ returns NotImplemented when conversion raises ValueError."""
+
+    class BadIterator:
+        """A type that raises ValueError when iterated."""
+
+        def __iter__(self):
+            raise ValueError("Can't iterate this")
+
+    r = Ranges("1:5")
+    bad = BadIterator()
+
+    # Call __eq__ directly - should return NotImplemented
+    result = r.__eq__(bad)
+    assert result is NotImplemented
+
+
+def test_eq_returns_notimplemented_on_typeerror():
+    """Test that Ranges.__eq__ returns NotImplemented when conversion raises TypeError."""
+
+    class BadType:
+        """A type that raises TypeError when iterated."""
+
+        def __iter__(self):
+            raise TypeError("Not really iterable")
+
+    r = Ranges("1:5")
+    bad = BadType()
+
+    # Call __eq__ directly - should return NotImplemented
+    result = r.__eq__(bad)
+    assert result is NotImplemented
+
+
+def test_inequality_with_incompatible_types():
+    """Test that != works correctly with incompatible types."""
+
+    class BadIterator:
+        def __iter__(self):
+            raise ValueError("Can't iterate")
+
+    r = Ranges("1:5")
+    bad = BadIterator()
+
+    # These should return False (not equal)
+    assert r != bad
+    assert bad != r

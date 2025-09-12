@@ -1,5 +1,6 @@
 """Test Dict construction and basic dict interface compatibility"""
 
+import pytest
 from arranges import Dict
 
 
@@ -150,3 +151,12 @@ def test_ranges_updates_on_all_modifications():
 
     d.clear()
     assert d.ranges == ""
+
+
+def test_dict_too_many_positional_args():
+    """Dict should raise TypeError when given more than 1 positional arg."""
+    with pytest.raises(TypeError, match="Dict expected at most 1 argument, got 2"):
+        Dict({1: "a"}, {2: "b"})
+
+    with pytest.raises(TypeError, match="Dict expected at most 1 argument, got 3"):
+        Dict({1: "a"}, {2: "b"}, {3: "c"})
